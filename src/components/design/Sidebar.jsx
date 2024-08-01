@@ -1,7 +1,11 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const logout = () => {
+    navigate("/");
+  };
   return (
     <div className="flex flex-col h-full py-[20px]">
       <div className="h-full flex flex-col justify-between">
@@ -142,7 +146,7 @@ const Sidebar = () => {
           </NavLink>
           <NavLink
             exact
-            to="/dashboard/special-services"
+            to="/dashboard/services"
             className="flex items-center gap-[10px] text-[#6B7280]"
           >
             <svg
@@ -236,7 +240,10 @@ const Sidebar = () => {
           </NavLink>
         </div>
         <div className="h-[20%] w-full flex items-end">
-          <button className="h-[50px] text-white w-[85%] flex items-center justify-center gap-[10px] bg-[#12B981] rounded-md">
+          <button
+            onClick={logout}
+            className="h-[50px] text-white w-[85%] flex items-center justify-center gap-[10px] bg-[#12B981] rounded-md"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"

@@ -15,6 +15,10 @@ import Transporter from "./pages/customers/Transporter";
 import Mechanization from "./pages/customers/Mechanization";
 import SpecialServices from "./pages/customers/SpecialServices";
 import ValueAddition from "./pages/customers/ValueAddition";
+import Deliveries from "./pages/deliveries/Deliveries";
+import Services from "./pages/special-services/Services";
+import Product from "./pages/products/Product";
+import Order from "./pages/orders/Order";
 
 function App() {
   return (
@@ -50,6 +54,11 @@ function App() {
             path="create-profile/value-addition"
             element={<ValueAddition />}
           />
+          <Route path="deliveries" element={<Deliveries />} />
+          <Route path="services" element={<Services />} />
+
+          <Route path="products/:id" element={<Product />} />
+          <Route path="orders/:id" element={<Order />} />
         </Route>
       </Routes>
     </>

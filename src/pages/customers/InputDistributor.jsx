@@ -1,5 +1,6 @@
 import React from "react";
 import { Select, Space } from "antd";
+import { Link } from "react-router-dom";
 
 const InputDistributor = () => {
   const handleChange = (value) => {
@@ -28,7 +29,7 @@ const InputDistributor = () => {
         Input distributor profile
       </p>
       <div className="flex w-full justify-between sm:flex-col sm:w-[95%] sm:mx-auto">
-        <div className="flex w-[45%] flex flex-col">
+        <div className="flex w-[45%] sm:w-[100%] flex flex-col">
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">Name</label>
             <input
@@ -126,7 +127,7 @@ const InputDistributor = () => {
             />
           </div>
         </div>
-        <div className="flex w-[45%] flex flex-col">
+        <div className="flex w-[45%] sm:w-[100%] flex flex-col">
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">
               Upload your certificate of registration
@@ -213,8 +214,17 @@ const InputDistributor = () => {
           </div>
         </div>
       </div>
+      <div className="my-[20px] w-full flex items-center gap-[10px]">
+        <input type="checkbox" name="terms" id="terms" />
+        <span>
+          I agree to the{" "}
+          <Link className="text-[#0000FF] underline" to="/terms">
+            Terms and conditions
+          </Link>
+        </span>
+      </div>
       <div className="flex justify-end">
-        <button className="h-[45px] text-white bg-[#12B981] px-[30px]">
+        <button className="h-[45px] sm:w-[95%] mx-auto text-white bg-[#12B981] px-[30px]">
           Create Profile
         </button>
       </div>

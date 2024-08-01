@@ -9,10 +9,10 @@ const HomeLayout = () => {
     <div className="w-[100vw] h-[100vh]">
       <div className="w-[95%] mx-auto h-full">
         <div className="flex items-center h-full w-full">
-          <div className="w-[15%] h-full border-r-2">
+          <div className="w-[15%] sm:hidden h-full border-r-2">
             <Sidebar />
           </div>
-          <div className="w-[85%] relative h-full flex flex-col">
+          <div className="w-[85%] sm:w-[95%] sm:mx-auto relative h-full flex flex-col">
             <div className="h-[70px] w-[80%] fixed top-0 left-[16.8%] bg-white">
               <Topbar />
             </div>

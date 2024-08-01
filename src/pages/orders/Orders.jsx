@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { orders } from "../../static/orders";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
+  const navigate = useNavigate();
   const [startDate, setStartDate] = useState("2024-07-31");
   const [endDate, setEndDate] = useState("2024-07-31");
   return (
@@ -136,6 +138,8 @@ const Orders = () => {
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
+                className="cursor-pointer"
+                onClick={() => navigate(`/dashboard/orders/${order.id}`)}
               >
                 <g fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="3" />

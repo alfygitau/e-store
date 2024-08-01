@@ -1,5 +1,6 @@
 import React from "react";
 import { Select, Space } from "antd";
+import { Link } from "react-router-dom";
 
 const Aggregator = () => {
   const handleChange = (value) => {
@@ -140,6 +141,12 @@ const Aggregator = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="my-[20px] w-full flex items-center gap-[10px]">
+        <input type="checkbox" name="terms" id="terms" />
+        <span>
+          I agree to the <Link className="text-[#0000FF] underline" to='/terms'>Terms and conditions</Link>
+        </span>
       </div>
       <div className="flex justify-end">
         <button className="h-[45px] text-white bg-[#12B981] px-[30px]">
