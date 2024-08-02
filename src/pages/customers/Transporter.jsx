@@ -1,7 +1,53 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Transporter = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [county, setCounty] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [gender, setGender] = useState("");
+  const [licenseNumber, setLicenseNumber] = useState("");
+
+  const fileInputRef = useRef(null);
+  const licenseFileInputRef = useRef(null);
+  const vehicleFileInputRef = useRef(null);
+
+  const handleClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  const handleClickLicense = () => {
+    if (licenseFileInputRef.current) {
+      licenseFileInputRef.current.click();
+    }
+  };
+  const handleClickVehicle = () => {
+    if (vehicleFileInputRef.current) {
+      vehicleFileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
+  const handleFileChangeLicense = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
+  const handleFileChangeVehicle = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <p className="text-[16px] font-bold my-[10px]">Transporter profile</p>
@@ -11,6 +57,8 @@ const Transporter = () => {
             <label htmlFor="name">Name</label>
             <input
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter your full name"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -20,6 +68,8 @@ const Transporter = () => {
             <input
               type="text"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
           </div>
@@ -27,6 +77,8 @@ const Transporter = () => {
             <label htmlFor="phone">Phone number</label>
             <input
               type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               placeholder="Enter your phone number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -35,6 +87,8 @@ const Transporter = () => {
             <label htmlFor="phone">County</label>
             <select
               type="text"
+              value={county}
+              onChange={(e) => setCounty(e.target.value)}
               placeholder="Enter your phone number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             >
@@ -47,6 +101,8 @@ const Transporter = () => {
             <label htmlFor="phone">Id number</label>
             <input
               type="text"
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
               placeholder="Enter your Id number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -61,7 +117,10 @@ const Transporter = () => {
           </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">Upload your vehicle registration</label>
-            <div className="w-full h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClick}
+              className="w-full cursor-pointer h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -81,6 +140,13 @@ const Transporter = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
         </div>
@@ -89,13 +155,18 @@ const Transporter = () => {
             <label htmlFor="license">Driver's license number</label>
             <input
               type="text"
+              value={licenseNumber}
+              onChange={(e) => setLicenseNumber(e.target.value)}
               placeholder="Enter your license number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
           </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">Upload your driving license</label>
-            <div className="w-full h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClickLicense}
+              className="w-full cursor-pointer h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -115,11 +186,21 @@ const Transporter = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={licenseFileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChangeLicense}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">Upload an image of your vehicle</label>
-            <div className="w-full h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClickVehicle}
+              className="w-full cursor-pointer h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -139,6 +220,13 @@ const Transporter = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={vehicleFileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChangeVehicle}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
         </div>

@@ -1,10 +1,67 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Select, Space } from "antd";
 import { Link } from "react-router-dom";
 
 const InputDistributor = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [county, setCounty] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [gender, setGender] = useState("");
+  const [supplier, setSupplier] = useState("");
+
   const handleChange = (value) => {
     console.log(`selected ${value}`);
+  };
+  const fileInputRef = useRef(null);
+  const registrationFileInputRef = useRef(null);
+  const kephisCertificateFileInputRef = useRef(null);
+  const identificationFileInputRef = useRef(null);
+  const handleClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  const handleClickCertificateRegistration = () => {
+    if (registrationFileInputRef.current) {
+      registrationFileInputRef.current.click();
+    }
+  };
+  const handleClickKephisCertificate = () => {
+    if (kephisCertificateFileInputRef.current) {
+      kephisCertificateFileInputRef.current.click();
+    }
+  };
+  const handleClickIdentification = () => {
+    if (identificationFileInputRef.current) {
+      identificationFileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
+  const handleFileChangeCertificateRegistration = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
+  const handleFileChangeKephisCertificate = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
+  const handleFileChangeIdentification = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
   };
   const options = [
     {
@@ -34,6 +91,8 @@ const InputDistributor = () => {
             <label htmlFor="name">Name</label>
             <input
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter your full name"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -42,6 +101,8 @@ const InputDistributor = () => {
             <label htmlFor="email">Email</label>
             <input
               type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -50,6 +111,8 @@ const InputDistributor = () => {
             <label htmlFor="phone">Phone number</label>
             <input
               type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               placeholder="Enter your phone number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -58,6 +121,8 @@ const InputDistributor = () => {
             <label htmlFor="phone">County</label>
             <select
               type="text"
+              value={county}
+              onChange={(e) => setCounty(e.target.value)}
               placeholder="Enter your phone number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             >
@@ -70,7 +135,9 @@ const InputDistributor = () => {
             <label htmlFor="gender">Gender</label>
             <select
               type="text"
-              placeholder="Enter your phone number"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              placeholder="Enter your gender"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             >
               <option value="">Select your gender</option>
@@ -93,7 +160,10 @@ const InputDistributor = () => {
             <label htmlFor="name">
               Upload your Agrovet-Business registration certificate
             </label>
-            <div className="w-full h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClick}
+              className="w-full cursor-pointer h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -116,12 +186,21 @@ const InputDistributor = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="license">Main supplier</label>
             <input
               type="text"
+              value={supplier}
+              onChange={(e) => setSupplier(e.target.value)}
               placeholder="Enter your suppliers"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -132,7 +211,10 @@ const InputDistributor = () => {
             <label htmlFor="name">
               Upload your certificate of registration
             </label>
-            <div className="w-full h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClickCertificateRegistration}
+              className="w-full cursor-pointer h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -152,11 +234,21 @@ const InputDistributor = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={registrationFileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChangeCertificateRegistration}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">Upload your Kephis certificate</label>
-            <div className="w-full h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClickKephisCertificate}
+              className="w-full cursor-pointer h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -176,12 +268,21 @@ const InputDistributor = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={kephisCertificateFileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChangeKephisCertificate}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="phone">Id number</label>
             <input
               type="text"
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
               placeholder="Enter your Id number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -190,7 +291,10 @@ const InputDistributor = () => {
             <label htmlFor="name">
               Upload an image of your Identification card
             </label>
-            <div className="w-full h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClickIdentification}
+              className="w-full cursor-pointer h-[160px] p-[20px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -210,6 +314,13 @@ const InputDistributor = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={identificationFileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChangeIdentification}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
         </div>
@@ -223,7 +334,7 @@ const InputDistributor = () => {
           </Link>
         </span>
       </div>
-      <div className="flex justify-end">
+      <div className="flex w-full items-center justify-end">
         <button className="h-[45px] sm:w-[95%] mx-auto text-white bg-[#12B981] px-[30px]">
           Create Profile
         </button>

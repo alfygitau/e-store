@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useRef } from "react";
 
 const AddProduct = () => {
+  const fileInputRef = useRef(null);
+
+  const handleClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+    }
+  };
   return (
     <div className="p-[20px] h-full w-full overflow-y-auto">
       <p className="font-bold text-[16px] my-[20px]">
@@ -26,7 +40,10 @@ const AddProduct = () => {
           </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">Product images</label>
-            <div className="w-full h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]">
+            <div
+              onClick={handleClick}
+              className="w-full cursor-pointer h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
@@ -46,6 +63,13 @@ const AddProduct = () => {
               <p className="text-[14px] italic text-[#9CA3AF]">
                 png, jpeg, webp, and jpg images will be accepted
               </p>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                accept=".png,.jpeg,.webp,.jpg"
+              />
             </div>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
