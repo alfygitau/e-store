@@ -37,7 +37,7 @@ const Customers = () => {
                 d="M42 27c0 6-4 16-18 16S6 33 6 27M24.008 5.1V33M12 17L24 5l12 12"
               />
             </svg>
-            Export customers
+            Export merchants
           </button>
           <button className="bg-white border px-[20px] h-[45px] text-[#000] flex items-center justify-center gap-[10px]">
             <svg
@@ -55,7 +55,7 @@ const Customers = () => {
                 d="M20.75 12a.75.75 0 0 0-1.5 0a7.25 7.25 0 1 1-14.5 0a.75.75 0 0 0-1.5 0a8.75 8.75 0 1 0 17.5 0"
               />
             </svg>
-            Import customers
+            Import merchants
           </button>
         </div>
         <div className="flex items-center gap-[15px]">
@@ -88,7 +88,7 @@ const Customers = () => {
                 d="M6.5 1.75a.75.75 0 0 0-1.5 0V5H1.75a.75.75 0 0 0 0 1.5H5v3.25a.75.75 0 0 0 1.5 0V6.5h3.25a.75.75 0 0 0 0-1.5H6.5z"
               />
             </svg>
-            Add customer
+            Add merchant
           </button>
         </div>
       </div>
@@ -113,7 +113,8 @@ const Customers = () => {
             <input type="checkbox" name="export" id="export" />
           </div>
           <p className="w-[5%]">Id</p>
-          <p className="w-[30%]">Full name</p>
+          <p className="w-[20%]">Full name</p>
+          <p className="w-[10%]">Role</p>
           <p className="w-[20%]">Email</p>
           <p className="w-[15%]">Phone number</p>
           <p className="w-[15%]">Date</p>
@@ -128,7 +129,8 @@ const Customers = () => {
               <input type="checkbox" name="export" id="export" />
             </div>
             <p className="w-[5%]">{customer.id}</p>
-            <p className="w-[30%]">{customer.fullName}</p>
+            <p className="w-[20%]">{customer.fullName}</p>
+            <p className="w-[10%]">{customer.role}</p>
             <p className="w-[20%]">{customer.email}</p>
             <p className="w-[15%]">{customer.phoneNumber}</p>
             <p className="w-[15%]">{customer.date}</p>

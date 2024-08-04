@@ -5,6 +5,7 @@ export const customers = [
     email: "john.doe@example.com",
     phoneNumber: "+254701234567",
     date: "2024-07-31",
+    role: "Input distributor",
   },
   {
     id: "CUS002",
@@ -12,6 +13,7 @@ export const customers = [
     email: "jane.smith@example.com",
     phoneNumber: "+254701234568",
     date: "2024-07-30",
+    role: "Transporter",
   },
   {
     id: "CUS003",
@@ -19,6 +21,7 @@ export const customers = [
     email: "samuel.johnson@example.com",
     phoneNumber: "+254701234569",
     date: "2024-07-29",
+    role: "Aggregator",
   },
   {
     id: "CUS004",
@@ -26,6 +29,7 @@ export const customers = [
     email: "emily.davis@example.com",
     phoneNumber: "+254701234570",
     date: "2024-07-28",
+    role: "Special services",
   },
   {
     id: "CUS005",
@@ -33,6 +37,7 @@ export const customers = [
     email: "michael.brown@example.com",
     phoneNumber: "+254701234571",
     date: "2024-07-27",
+    role: "Mechanization",
   },
   {
     id: "CUS006",
@@ -40,6 +45,7 @@ export const customers = [
     email: "linda.wilson@example.com",
     phoneNumber: "+254701234572",
     date: "2024-07-26",
+    role: "Value addition",
   },
   {
     id: "CUS007",
@@ -47,6 +53,7 @@ export const customers = [
     email: "david.clark@example.com",
     phoneNumber: "+254701234573",
     date: "2024-07-25",
+    role: "Input distributor",
   },
   {
     id: "CUS008",
@@ -54,6 +61,7 @@ export const customers = [
     email: "sarah.lewis@example.com",
     phoneNumber: "+254701234574",
     date: "2024-07-24",
+    role: "Transporter",
   },
   {
     id: "CUS009",
@@ -61,6 +69,7 @@ export const customers = [
     email: "james.walker@example.com",
     phoneNumber: "+254701234575",
     date: "2024-07-23",
+    role: "Aggregator",
   },
   {
     id: "CUS010",
@@ -68,5 +77,6 @@ export const customers = [
     email: "jessica.martinez@example.com",
     phoneNumber: "+254701234576",
     date: "2024-07-22",
+    role: "Special services",
   },
 ];
