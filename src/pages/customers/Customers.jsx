@@ -95,9 +95,19 @@ const Customers = () => {
       <div className="h-[120px] px-[20px] flex items-center justify-between bg-white w-full border my-[20px]">
         <input
           type="text"
-          placeholder="Search a customer(s)/email/phone"
-          class="h-[50px] w-[72%] text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+          placeholder="Search a merchant(s)/email/phone"
+          class="h-[50px] w-[48%] text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
         />
+        <select
+          class="h-[50px] w-[24%] text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+          name="role"
+          id="role"
+        >
+          <option value="input distributor">Input distributor</option>
+          <option value="input distributor">Transporter</option>
+          <option value="input distributor">Aggregator</option>
+          <option value="input distributor">Special services</option>
+        </select>
         <div className="w-[24%] flex items-center justify-between">
           <button className="h-[50px] bg-[#057856] px-[20px] text-white w-[45%]">
             Filter
@@ -114,11 +124,11 @@ const Customers = () => {
           </div>
           <p className="w-[5%]">Id</p>
           <p className="w-[20%]">Full name</p>
-          <p className="w-[10%]">Role</p>
+          <p className="w-[15%]">Role</p>
           <p className="w-[20%]">Email</p>
           <p className="w-[15%]">Phone number</p>
           <p className="w-[15%]">Date</p>
-          <p className="w-[15%]">Actions</p>
+          <p className="w-[10%]">Actions</p>
         </div>
         {customers.map((customer) => (
           <div
@@ -128,13 +138,13 @@ const Customers = () => {
             <div className="w-[5%]">
               <input type="checkbox" name="export" id="export" />
             </div>
-            <p className="w-[5%]">{customer.id}</p>
-            <p className="w-[20%]">{customer.fullName}</p>
-            <p className="w-[10%]">{customer.role}</p>
-            <p className="w-[20%]">{customer.email}</p>
-            <p className="w-[15%]">{customer.phoneNumber}</p>
-            <p className="w-[15%]">{customer.date}</p>
-            <div className="w-[15%] flex items-center gap-[10px] truncate">
+            <p className="w-[5%] truncate">{customer.id}</p>
+            <p className="w-[20%] truncate">{customer.fullName}</p>
+            <p className="w-[15%] truncate">{customer.role}</p>
+            <p className="w-[20%] truncate">{customer.email}</p>
+            <p className="w-[15%] truncate">{customer.phoneNumber}</p>
+            <p className="w-[15%] truncate">{customer.date}</p>
+            <div className="w-[10%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
