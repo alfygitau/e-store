@@ -16,44 +16,37 @@ const Homepage = () => {
   const data = [
     {
       name: "Jan",
-      uv: 4000,
-      pv: 2400,
+      sales: 2400,
       amt: 2400,
     },
     {
       name: "Feb",
-      uv: 3000,
-      pv: 1398,
+      sales: 1398,
       amt: 2210,
     },
     {
       name: "March",
-      uv: 2000,
-      pv: 9800,
+      sales: 9800,
       amt: 2290,
     },
     {
       name: "April",
-      uv: 2780,
-      pv: 3908,
+      sales: 3908,
       amt: 2000,
     },
     {
       name: "May",
-      uv: 1890,
-      pv: 4800,
+      sales: 4800,
       amt: 2181,
     },
     {
       name: "June",
-      uv: 2390,
-      pv: 3800,
+      sales: 3800,
       amt: 2500,
     },
     {
       name: "July",
-      uv: 3490,
-      pv: 4300,
+      sales: 4300,
       amt: 2100,
     },
   ];
@@ -137,8 +130,8 @@ const Homepage = () => {
   return (
     <div className="h-full overflow-y-auto p-[20px] w-full">
       <p className="text-[18px] font-bold mb-[10px]">Dashboard Overview</p>
-      <div className="flex items-center gap-[10px] flex-wrap">
-        <div className="h-[200px] w-[320px] rounded bg-[#0B9488] text-white p-[10px] flex flex-col items-center justify-center">
+      <div className="flex items-center mb-[40px] gap-[10px] overflow-x-auto scrollbar-hide">
+        <div className="h-[200px] min-w-[320px] rounded bg-[#0B9488] text-white p-[10px] flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -160,24 +153,24 @@ const Homepage = () => {
           </svg>
           <div className="mb-[10px]">
             <p className="text-center">Today's orders</p>
-            <p className="text-[20px] font-bold">KSH. 200,234.50</p>
+            <p className="text-[20px] text-center font-bold">KSH. 0.00</p>
           </div>
           <div className="flex w-[90%] mx-auto justify-between">
             <div className="flex flex-col">
               <p className="text-[14px]">Cash</p>
-              <p className="text-[12px]">KSH. 200,234.50</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Card</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Credit</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
           </div>
         </div>
-        <div className="h-[200px] w-[320px] rounded bg-[#FC923C] text-white p-[10px] flex flex-col items-center justify-center">
+        <div className="h-[200px] min-w-[320px] rounded bg-[#FC923C] text-white p-[10px] flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -199,24 +192,24 @@ const Homepage = () => {
           </svg>
           <div className="mb-[10px]">
             <p className="text-center">Yesterday's orders</p>
-            <p className="text-[20px] font-bold">KSH. 200,234.50</p>
+            <p className="text-[20px] text-center font-bold">KSH. 0.00</p>
           </div>
           <div className="flex w-[90%] mx-auto justify-between">
             <div className="flex flex-col">
               <p className="text-[14px]">Cash</p>
-              <p className="text-[12px]">KSH. 200,234.50</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Card</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Credit</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
           </div>
         </div>
-        <div className="h-[200px] w-[320px] rounded bg-[#3B81F6] text-white p-[10px] flex flex-col items-center justify-center">
+        <div className="h-[200px] min-w-[320px] rounded bg-[#3B81F6] text-white p-[10px] flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -238,24 +231,24 @@ const Homepage = () => {
           </svg>
           <div className="mb-[10px]">
             <p className="text-center">This month's orders</p>
-            <p className="text-[20px] font-bold">KSH. 200,234.50</p>
+            <p className="text-[20px] text-center font-bold">KSH. 0.00</p>
           </div>
           <div className="flex w-[90%] mx-auto justify-between">
             <div className="flex flex-col">
               <p className="text-[14px]">Cash</p>
-              <p className="text-[12px]">KSH. 200,234.50</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Card</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Credit</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
           </div>
         </div>
-        <div className="h-[200px] w-[320px] rounded bg-[#0591B2] text-white p-[10px] flex flex-col items-center justify-center">
+        <div className="h-[200px] min-w-[320px] rounded bg-[#0591B2] text-white p-[10px] flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -277,24 +270,24 @@ const Homepage = () => {
           </svg>
           <div className="mb-[10px]">
             <p className="text-center">Last month's orders</p>
-            <p className="text-[20px] font-bold">KSH. 200,234.50</p>
+            <p className="text-[20px] text-center font-bold">KSH. 0.00</p>
           </div>
           <div className="flex w-[90%] mx-auto justify-between">
             <div className="flex flex-col">
               <p className="text-[14px]">Cash</p>
-              <p className="text-[12px]">KSH. 200,234.50</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Card</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Credit</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
           </div>
         </div>
-        <div className="h-[200px] w-[320px] rounded bg-[#04966A] text-white p-[10px] flex flex-col items-center justify-center">
+        <div className="h-[200px] min-w-[320px] rounded bg-[#04966A] text-white p-[10px] flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -316,20 +309,20 @@ const Homepage = () => {
           </svg>
           <div className="mb-[10px]">
             <p className="text-center">Total sales</p>
-            <p className="text-[20px] font-bold">KSH. 200,234.50</p>
+            <p className="text-[20px] text-center font-bold">KSH. 0.00</p>
           </div>
           <div className="flex w-[90%] mx-auto justify-between">
             <div className="flex flex-col">
               <p className="text-[14px]">Cash</p>
-              <p className="text-[12px]">KSH. 200,234.50</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Card</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
             <div className="flex flex-col">
               <p className="text-[14px]">Credit</p>
-              <p className="text-[12px]">KSH. 0.00</p>
+              <p className="text-[12px] text-center font-bold">KSH. 0.00</p>
             </div>
           </div>
         </div>
@@ -450,11 +443,11 @@ const Homepage = () => {
               <Legend />
               <Line
                 type="monotone"
-                dataKey="pv"
+                dataKey="sales"
                 stroke="#8884d8"
                 activeDot={{ r: 8 }}
               />
-              <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+              {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
             </LineChart>
           </ResponsiveContainer>
         </div>
