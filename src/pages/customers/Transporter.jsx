@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../storage/firebase";
 
 const Transporter = () => {
   const [name, setName] = useState("");
@@ -33,19 +35,61 @@ const Transporter = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+          });
+        }
+      );
     }
   };
   const handleFileChangeLicense = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+          });
+        }
+      );
     }
   };
   const handleFileChangeVehicle = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+          });
+        }
+      );
     }
   };
   return (

@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import { Select, Space } from "antd";
 import { Link } from "react-router-dom";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../storage/firebase";
 
 const SpecialServices = () => {
   const fileInputRef = useRef(null);
@@ -35,21 +37,63 @@ const SpecialServices = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+          });
+        }
+      );
     }
   };
 
   const handleFileChangeCertificate = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+          });
+        }
+      );
     }
   };
 
   const handleFileChangeIdentification = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log(downloadURL);
+          });
+        }
+      );
     }
   };
   const handleChange = (value) => {
