@@ -1,7 +1,9 @@
 import React from "react";
 import { users } from "../../static/users";
+import { useNavigate } from "react-router-dom";
 
 const Users = () => {
+  const navigate = useNavigate();
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <p className="text-[16px] font-bold">All users</p>
