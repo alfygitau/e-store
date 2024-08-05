@@ -21,6 +21,7 @@ import Product from "./pages/products/Product";
 import Order from "./pages/orders/Order";
 import AddService from "./pages/special-services/AddService";
 import Customer from "./pages/customers/Customer";
+import Users from "./pages/users/Users";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="customers" element={<Customers />} />
           <Route path="customers/:id" element={<Customer />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="users" element={<Users />} />
 
           {/* profiles */}
           <Route path="create-profile/aggregator" element={<Aggregator />} />

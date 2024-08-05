@@ -1,24 +1,10 @@
-import React, { useState } from "react";
-import { customers } from "../../static/customers";
-import { Modal } from "antd";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { users } from "../../static/users";
 
-const Customers = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [role, setRole] = useState("aggregator");
-  const navigate = useNavigate();
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    navigate(`/dashboard/create-profile/${role}`);
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+const Users = () => {
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
+      <p className="text-[16px] font-bold">All users</p>
       <div className="h-[120px] px-[20px] flex items-center justify-between bg-white w-full border my-[20px]">
         <div className="flex items-center gap-[15px]">
           <button className="bg-white border px-[20px] h-[45px] text-[#000] flex items-center justify-center gap-[10px]">
@@ -37,7 +23,7 @@ const Customers = () => {
                 d="M42 27c0 6-4 16-18 16S6 33 6 27M24.008 5.1V33M12 17L24 5l12 12"
               />
             </svg>
-            Export merchants
+            Export users
           </button>
           <button className="bg-white border px-[20px] h-[45px] text-[#000] flex items-center justify-center gap-[10px]">
             <svg
@@ -55,7 +41,7 @@ const Customers = () => {
                 d="M20.75 12a.75.75 0 0 0-1.5 0a7.25 7.25 0 1 1-14.5 0a.75.75 0 0 0-1.5 0a8.75 8.75 0 1 0 17.5 0"
               />
             </svg>
-            Import merchants
+            Import users
           </button>
         </div>
         <div className="flex items-center gap-[15px]">
@@ -71,12 +57,9 @@ const Customers = () => {
                 d="M5 3h2a1 1 0 0 0-2 0M4 3a2 2 0 1 1 4 0h2.5a.5.5 0 0 1 0 1h-.441l-.443 5.17A2 2 0 0 1 7.623 11H4.377a2 2 0 0 1-1.993-1.83L1.941 4H1.5a.5.5 0 0 1 0-1zm3.5 3a.5.5 0 0 0-1 0v2a.5.5 0 0 0 1 0zM5 5.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 1 0V6a.5.5 0 0 0-.5-.5"
               />
             </svg>
-            Delete
+            Delete users
           </button>
-          <button
-            onClick={showModal}
-            className="bg-[#12B981] px-[20px] truncate h-[45px] text-[#fff] flex items-center justify-center gap-[10px]"
-          >
+          <button className="bg-[#12B981] px-[20px] truncate h-[45px] text-[#fff] flex items-center justify-center gap-[10px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -88,25 +71,23 @@ const Customers = () => {
                 d="M6.5 1.75a.75.75 0 0 0-1.5 0V5H1.75a.75.75 0 0 0 0 1.5H5v3.25a.75.75 0 0 0 1.5 0V6.5h3.25a.75.75 0 0 0 0-1.5H6.5z"
               />
             </svg>
-            Add merchant
+            Add user
           </button>
         </div>
       </div>
       <div className="h-[120px] px-[20px] flex items-center justify-between bg-white w-full border my-[20px]">
         <input
           type="text"
-          placeholder="Search a merchant(s)/email/phone"
+          placeholder="Search a user(s)/email/phone"
           class="h-[50px] w-[48%] text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
         />
         <select
           class="h-[50px] w-[24%] text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
-          name="role"
-          id="role"
+          name="location"
+          id="location"
         >
-          <option value="input distributor">Input distributor</option>
-          <option value="input distributor">Transporter</option>
-          <option value="input distributor">Aggregator</option>
-          <option value="input distributor">Special services</option>
+          <option value="nairobi">Nairobi</option>
+          <option value="siaya">Siaya</option>
         </select>
         <div className="w-[24%] flex items-center justify-between">
           <button className="h-[50px] bg-[#057856] px-[20px] text-white w-[45%]">
@@ -124,26 +105,26 @@ const Customers = () => {
           </div>
           <p className="w-[5%]">Id</p>
           <p className="w-[20%]">Full name</p>
-          <p className="w-[15%]">Role</p>
+          <p className="w-[15%]">Gender</p>
           <p className="w-[20%]">Email</p>
           <p className="w-[15%]">Phone number</p>
-          <p className="w-[15%]">Date</p>
+          <p className="w-[15%]">County</p>
           <p className="w-[10%]">Actions</p>
         </div>
-        {customers.map((customer) => (
+        {users.map((user) => (
           <div
-            key={customer.id}
+            key={user.id}
             className="flex text-[14px] border-b h-[55px] items-center"
           >
             <div className="w-[5%]">
               <input type="checkbox" name="export" id="export" />
             </div>
-            <p className="w-[5%] truncate">{customer.id}</p>
-            <p className="w-[20%] truncate">{customer.fullName}</p>
-            <p className="w-[15%] truncate">{customer.role}</p>
-            <p className="w-[20%] truncate">{customer.email}</p>
-            <p className="w-[15%] truncate">{customer.phoneNumber}</p>
-            <p className="w-[15%] truncate">{customer.date}</p>
+            <p className="w-[5%] truncate">{user.id}</p>
+            <p className="w-[20%] truncate">{user.name}</p>
+            <p className="w-[15%] truncate">{user.gender}</p>
+            <p className="w-[20%] truncate">{user.email}</p>
+            <p className="w-[15%] truncate">{user.phoneNumber}</p>
+            <p className="w-[15%] truncate">{user.address.county}</p>
             <div className="w-[10%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +147,7 @@ const Customers = () => {
                 height="24"
                 viewBox="0 0 24 24"
                 className="cursor-pointer"
-                onClick={() => navigate(`/dashboard/customers/${customer.id}`)}
+                onClick={() => navigate(`/dashboard/users/${user.id}`)}
               >
                 <g fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="3" />
@@ -189,44 +170,8 @@ const Customers = () => {
           </div>
         ))}
       </div>
-
-      <Modal
-        title=""
-        centered
-        width={700}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <div className="w-full">
-          <p className="mb-[20px] text-[16px] font-semibold">
-            Choose a role profile
-          </p>
-          <p className="mb-[20px] text-[14px] text-left">
-            Select a your role to create an account with E-store. The profile
-            you choose determines the requirements for the account creation
-          </p>
-          <div className="flex flex-col w-full mb-[20px]">
-            <p>Select a role profile</p>
-            <select
-              type="text"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              placeholder="Enter your role"
-              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
-            >
-              <option value="input-distributor">Input distributor</option>
-              <option value="transporter">Transporter</option>
-              <option value="aggregator">Aggregator</option>
-              <option value="special-services">Special services</option>
-              <option value="mechanization">Mechanization</option>
-              <option value="value-addition">Value addition</option>
-            </select>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };
 
-export default Customers;
+export default Users;
