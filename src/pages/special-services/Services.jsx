@@ -51,6 +51,23 @@ const SpecialServices = () => {
             </svg>
             Download all services
           </button>
+          <button
+            onClick={() => navigate("/dashboard/services/add-service")}
+            className="bg-[#12B981] px-[20px] h-[45px] text-[#fff] flex items-center justify-center gap-[10px]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 12 12"
+            >
+              <path
+                fill="currentColor"
+                d="M6.5 1.75a.75.75 0 0 0-1.5 0V5H1.75a.75.75 0 0 0 0 1.5H5v3.25a.75.75 0 0 0 1.5 0V6.5h3.25a.75.75 0 0 0 0-1.5H6.5z"
+              />
+            </svg>
+            Add a service
+          </button>
         </div>
       </div>
       <div className="h-[200px] p-[15px] flex flex-wrap justify-between bg-white w-full border my-[20px]">
@@ -134,9 +151,15 @@ const SpecialServices = () => {
               className="flex text-[13px] border-b h-[50px] items-center"
             >
               <div className="w-[6%]">{service.id}</div>
-              <p className="w-[14%] truncate px-[10px]">{service.serviceName}</p>
-              <p className="w-[20%] truncate px-[10px]">{service.description}</p>
-              <p className="w-[10%] truncate px-[10px]">{service.expertiseNeeded}</p>
+              <p className="w-[14%] truncate px-[10px]">
+                {service.serviceName}
+              </p>
+              <p className="w-[20%] truncate px-[10px]">
+                {service.description}
+              </p>
+              <p className="w-[10%] truncate px-[10px]">
+                {service.expertiseNeeded}
+              </p>
               <p className="w-[10%] truncate">{service.user.name}</p>
               <p className="w-[10%] truncate">{service.price}</p>
               <p className="w-[8%] truncate">{service.status}</p>

@@ -19,6 +19,8 @@ import Deliveries from "./pages/deliveries/Deliveries";
 import Services from "./pages/special-services/Services";
 import Product from "./pages/products/Product";
 import Order from "./pages/orders/Order";
+import AddService from "./pages/special-services/AddService";
+import Customer from "./pages/customers/Customer";
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
           <Route path="categories" element={<Categories />} />
           <Route path="add-category" element={<AddCategory />} />
           <Route path="customers" element={<Customers />} />
+          <Route path="customers/:id" element={<Customer />} />
           <Route path="orders" element={<Orders />} />
 
           {/* profiles */}
@@ -56,6 +59,7 @@ function App() {
           />
           <Route path="deliveries" element={<Deliveries />} />
           <Route path="services" element={<Services />} />
+          <Route path="services/add-service" element={<AddService />} />
 
           <Route path="products/:id" element={<Product />} />
           <Route path="orders/:id" element={<Order />} />
