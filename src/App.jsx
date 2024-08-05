@@ -23,6 +23,7 @@ import AddService from "./pages/special-services/AddService";
 import Customer from "./pages/customers/Customer";
 import Users from "./pages/users/Users";
 import User from "./pages/users/User";
+import AddUser from "./pages/users/AddUser";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:id" element={<User />} />
+          <Route path="users/add-user" element={<AddUser />} />
 
           {/* profiles */}
           <Route path="create-profile/aggregator" element={<Aggregator />} />

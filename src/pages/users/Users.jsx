@@ -61,7 +61,10 @@ const Users = () => {
             </svg>
             Delete users
           </button>
-          <button className="bg-[#12B981] px-[20px] truncate h-[45px] text-[#fff] flex items-center justify-center gap-[10px]">
+          <button
+            onClick={() => navigate("/dashboard/users/add-user")}
+            className="bg-[#12B981] px-[20px] truncate h-[45px] text-[#fff] flex items-center justify-center gap-[10px]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
