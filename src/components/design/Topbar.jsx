@@ -1,12 +1,25 @@
 import React from "react";
 import { Dropdown, Space } from "antd";
 import { useNavigate } from "react-router-dom";
+import { auth, signOut } from "../../storage/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Topbar = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
   const handleLogout = () => {
+    logout();
+    signOut(auth)
+      .then(() => {
+        console.log("User signed out");
+      })
+      .catch((error) => {
+        console.error("Sign out error:", error);
+      });
     navigate("/");
   };
+
   const items = [
     {
       label: "Settings",
@@ -57,7 +70,7 @@ const Topbar = () => {
         <Dropdown menu={{ items }} trigger={["click"]}>
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-              Profile
+              {user?.name ? user?.name : "Profile"}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

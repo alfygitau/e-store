@@ -1,8 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  auth,
+  googleProvider,
+  signInWithPopup,
+  facebookProvider,
+  onAuthStateChanged,
+} from "../../storage/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const { login: authLogin } = useAuth();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleSignIn = () => {
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        const user = result.user;
+        setUser(result.user);
+        authLogin({
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          token: user.refreshToken,
+          phoneNumber: user.phoneNumber,
+          idToken: user.getIdToken(),
+          provider: user.providerData,
+        });
+        if (user.displayName) {
+          navigate("/dashboard");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const facebookLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      console.log(result.user);
+      setUser(result.user);
+    } catch (e) {
+      console.log(`login error ${e}`);
+    }
+  };
+
   const login = (e) => {
     e.preventDefault();
     navigate("/dashboard");
@@ -47,47 +100,6 @@ const Login = () => {
               </button>
             </div>
             <div className="border border-gray-300 mb-[20px]"></div>
-            <div className="w-full flex flex-col gap-[20px] mb-[20px]">
-              <button className="h-[50px] w-full flex items-center justify-center gap-[10px] rounded-[5px] text-[#000] hover:text-white hover:bg-[#0000FF] bg-[#F3F4F6]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 256 256"
-                >
-                  <path
-                    fill="#1877f2"
-                    d="M256 128C256 57.308 198.692 0 128 0S0 57.308 0 128c0 63.888 46.808 116.843 108 126.445V165H75.5v-37H108V99.8c0-32.08 19.11-49.8 48.348-49.8C170.352 50 185 52.5 185 52.5V84h-16.14C152.959 84 148 93.867 148 103.99V128h35.5l-5.675 37H148v89.445c61.192-9.602 108-62.556 108-126.445"
-                  />
-                  <path
-                    fill="#fff"
-                    d="m177.825 165l5.675-37H148v-24.01C148 93.866 152.959 84 168.86 84H185V52.5S170.352 50 156.347 50C127.11 50 108 67.72 108 99.8V128H75.5v37H108v89.445A129 129 0 0 0 128 256a129 129 0 0 0 20-1.555V165z"
-                  />
-                </svg>
-                Login with Facebook
-              </button>
-              <button className="h-[50px] w-full flex items-center justify-center gap-[10px] rounded-[5px] text-[#000] hover:text-white hover:bg-[#f00] bg-[#F3F4F6]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                >
-                  <g
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    color="currentColor"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 12h5a5 5 0 1 1-1.464-3.536" />
-                  </g>
-                </svg>
-                Login with Google
-              </button>
-            </div>
             <div className="flex flex-col gap-[10px]">
               <Link
                 className="text-[14px] text-[#0000FF] underline"
@@ -103,6 +115,53 @@ const Login = () => {
               </Link>
             </div>
           </form>
+          <div className="w-full flex flex-col gap-[20px] mb-[20px]">
+            <button
+              onClick={facebookLogin}
+              className="h-[50px] w-full flex items-center justify-center gap-[10px] rounded-[5px] text-[#000] hover:text-white hover:bg-[#0000FF] bg-[#F3F4F6]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 256 256"
+              >
+                <path
+                  fill="#1877f2"
+                  d="M256 128C256 57.308 198.692 0 128 0S0 57.308 0 128c0 63.888 46.808 116.843 108 126.445V165H75.5v-37H108V99.8c0-32.08 19.11-49.8 48.348-49.8C170.352 50 185 52.5 185 52.5V84h-16.14C152.959 84 148 93.867 148 103.99V128h35.5l-5.675 37H148v89.445c61.192-9.602 108-62.556 108-126.445"
+                />
+                <path
+                  fill="#fff"
+                  d="m177.825 165l5.675-37H148v-24.01C148 93.866 152.959 84 168.86 84H185V52.5S170.352 50 156.347 50C127.11 50 108 67.72 108 99.8V128H75.5v37H108v89.445A129 129 0 0 0 128 256a129 129 0 0 0 20-1.555V165z"
+                />
+              </svg>
+              Login with Facebook
+            </button>
+            <button
+              onClick={handleSignIn}
+              className="h-[50px] w-full flex items-center justify-center gap-[10px] rounded-[5px] text-[#000] hover:text-white hover:bg-[#f00] bg-[#F3F4F6]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  color="currentColor"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 12h5a5 5 0 1 1-1.464-3.536" />
+                </g>
+              </svg>
+              Login with Google
+            </button>
+          </div>
         </div>
       </div>
     </div>
