@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { createProduct } from "../../sdk/products/products";
 import { storage } from "../../storage/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getCategories } from "../../sdk/product-category/category";
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);
@@ -41,6 +42,21 @@ const AddProduct = () => {
       );
     }
   };
+
+  const getProductCategories = async () => {
+    try {
+      const response = await getCategories();
+      if (response.status === 200) {
+        setProductCategories(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    getProductCategories();
+  }, []);
 
   const createAProduct = async () => {
     try {
