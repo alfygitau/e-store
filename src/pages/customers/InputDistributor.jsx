@@ -5,7 +5,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../storage/firebase";
 
 const InputDistributor = () => {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [county, setCounty] = useState("");
@@ -13,6 +14,7 @@ const InputDistributor = () => {
   const [gender, setGender] = useState("");
   const [supplier, setSupplier] = useState("");
   const [url, setUrl] = useState("");
+  const [role, setRole] = useState(null);
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -107,7 +109,6 @@ const InputDistributor = () => {
     if (file) {
       const storageRef = ref(storage, `images/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
-
       uploadTask.on(
         "state_changed",
         (snapshot) => {},
@@ -139,6 +140,39 @@ const InputDistributor = () => {
       desc: "Card",
     },
   ];
+
+  const createMerchant = async () => {
+    let payload = {
+      wardId: 2,
+      subscriptionStatus: "EXPIRED",
+      subscriptionEndDate: "2023-06-15",
+      businessName: "Another Business Example",
+      merchantType: "INPUT_DISTRIBUTOR",
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      msisdn: phone,
+      username: phone,
+      roles: [9],
+      documents: [
+        {
+          title: "Document A",
+          imageUrl: "http://example.com/imageA.png",
+          documentNumber: "DOC125",
+        },
+        {
+          title: "Document B",
+          imageUrl: "http://example.com/imageB.png",
+          documentNumber: "DOC126",
+        },
+        {
+          title: "Document C",
+          imageUrl: "http://example.com/imageC.png",
+          documentNumber: "DOC127",
+        },
+      ],
+    };
+  };
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <p className="text-[16px] font-bold my-[10px]">
@@ -147,12 +181,22 @@ const InputDistributor = () => {
       <div className="flex w-full justify-between sm:flex-col sm:w-[95%] sm:mx-auto">
         <div className="flex w-[45%] sm:w-[100%] flex flex-col">
           <div className="flex flex-col w-full mb-[20px]">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="firstname">First Name</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your full name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="Enter your first name"
+              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+            />
+          </div>
+          <div className="flex flex-col w-full mb-[20px]">
+            <label htmlFor="lastname">Last Name</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Enter your last name"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
           </div>

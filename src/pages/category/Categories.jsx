@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { categories } from "../../static/categories";
 import { useNavigate } from "react-router-dom";
+import { getCategories } from "../../sdk/product-category/category";
 
 const Categories = () => {
   const navigate = useNavigate();
+  const [productCategories, setProductCategories] = useState([]);
+
+  const getProductCategories = async () => {
+    try {
+      const response = await getCategories();
+      if (response.status === 200) {
+        setProductCategories(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    getProductCategories();
+  }, []);
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <div className="h-[120px] px-[20px] flex items-center justify-between bg-white w-full border my-[20px]">

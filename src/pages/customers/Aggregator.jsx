@@ -9,6 +9,7 @@ const Aggregator = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [county, setCounty] = useState("");
+  const [businessName, setBusinessName] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [gender, setGender] = useState("");
   const fileInputRef = useRef(null);
@@ -159,6 +160,30 @@ const Aggregator = () => {
               placeholder="Enter your Id number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
+          </div>
+          <div className="flex flex-col w-full mb-[20px]">
+            <label htmlFor="phone">Business name</label>
+            <input
+              type="text"
+              value={businessName}
+              onChange={(e) => setBusinessName(e.target.value)}
+              placeholder="Enter your Id number"
+              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+            />
+          </div>
+          <div className="flex flex-col w-full mb-[20px]">
+            <label htmlFor="gender">Gender</label>
+            <select
+              type="text"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              placeholder="Enter your gender"
+              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+            >
+              <option value="">Select your gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
           </div>
         </div>
         <div className="flex w-[45%] flex flex-col">

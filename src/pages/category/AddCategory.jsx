@@ -1,8 +1,12 @@
 import React, { useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { createCategory } from "../../sdk/product-category/category";
 
 const AddCategory = () => {
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryDescription, setCategoryDescription] = useState("");
 
   const handleClick = () => {
     if (fileInputRef.current) {
@@ -16,6 +20,24 @@ const AddCategory = () => {
       setFile(file);
     }
   };
+
+  const createProductCategory = async () => {
+    const payload = {
+      name: categoryName,
+      description: categoryDescription,
+    };
+    try {
+      const response = await createCategory(payload);
+      if (response.status === 201 || response.status === 201) {
+        toast.success("Category created");
+        setCategoryName("");
+        setCategoryDescription("");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
   return (
     <div className="p-[20px] h-full w-full overflow-y-auto">
       <p className="font-bold text-[16px] my-[20px]">
@@ -27,6 +49,8 @@ const AddCategory = () => {
             <label htmlFor="name">Category name</label>
             <input
               type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               placeholder="Enter the product name"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -35,6 +59,8 @@ const AddCategory = () => {
             <label htmlFor="name">Category description</label>
             <textarea
               type="text"
+              value={categoryDescription}
+              onChange={(e) => setCategoryDescription(e.target.value)}
               placeholder="Enter the product description"
               class="h-[100px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
@@ -106,7 +132,10 @@ const AddCategory = () => {
         </div>
       </div>
       <div className="flex justify-end">
-        <button className="h-[45px] text-white bg-[#12B981] px-[30px]">
+        <button
+          onClick={createProductCategory}
+          className="h-[45px] text-white bg-[#12B981] px-[30px]"
+        >
           Add Category
         </button>
       </div>

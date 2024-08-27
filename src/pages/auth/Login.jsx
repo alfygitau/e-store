@@ -8,11 +8,15 @@ import {
   onAuthStateChanged,
 } from "../../storage/firebase";
 import { useAuth } from "../../contexts/AuthContext";
+import { authLogin } from "../../sdk/auth/auth";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const { login: authLogin } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login: loginUser } = useAuth();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -27,7 +31,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         setUser(result.user);
-        authLogin({
+        loginUser({
           uid: user.uid,
           name: user.displayName,
           email: user.email,
@@ -56,9 +60,31 @@ const Login = () => {
     }
   };
 
-  const login = (e) => {
+  const login = async (e) => {
     e.preventDefault();
-    navigate("/dashboard");
+    try {
+      const response = await authLogin(email, password);
+      if (response.status === 200) {
+        loginUser({
+          uid: response.data.message.userInfo.accountId,
+          name: response.data.message.userInfo.username,
+          email: response.data.message.userInfo.email,
+          photoURL: "",
+          token: response.data.message.access_token,
+          phoneNumber: response.data.message.userInfo.msisdn,
+          idToken: "",
+          provider: "",
+          user: "",
+          roles:response.data.message.userInfo.roles
+        });
+        toast.success("Success login");
+        navigate("/dashboard");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
   return (
     <div className="w-[100vw] h-[100vh] flex items-center justify-center">
@@ -79,19 +105,23 @@ const Login = () => {
           <form onSubmit={login} className="w-full h-full">
             <p className="text-[20px] text-left">Login</p>
             <div className="w-full flex flex-col gap-[5px] mb-[20px]">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Username</label>
               <input
                 type="text"
-                placeholder="Enter your email"
-                class="h-[50px] w-full text-[14px] rounded-[5px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your username"
+                className="h-[50px] w-full text-[14px] rounded-[5px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
               />
             </div>
             <div className="w-full flex flex-col gap-[5px] mb-[20px]">
               <label htmlFor="password">Password</label>
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                class="h-[50px] w-full text-[14px] rounded-[5px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+                className="h-[50px] w-full text-[14px] rounded-[5px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
               />
             </div>
             <div className="w-full mb-[20px]">

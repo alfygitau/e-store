@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "antd": "^5.19.4",
+    "axios": "^1.7.3",
     "firebase": "^10.12.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
+    "react-toastify": "^10.0.5",
     "recharts": "^2.12.7"
   },
   "devDependencies": {
@@ -27,6 +29,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "postcss": "^8.4.40",
+    "prettier": "3.3.3",
     "tailwindcss": "^3.4.7",
     "vite": "^5.3.4"
   }

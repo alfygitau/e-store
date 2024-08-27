@@ -9,7 +9,7 @@ const Product = () => {
 
   let otherProducts = products.filter(
     (product) =>
-      product.category === productDetails.category && product.id != id
+      product.category === productDetails.category && product.id !== id
   );
 
   return (
