@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { customers } from "../../static/customers";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getMerchants } from "../../sdk/merchants/merchant";
 
 const Customers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [merchants, setMerchants] = useState([]);
   const [role, setRole] = useState("aggregator");
   const navigate = useNavigate();
   const showModal = () => {
@@ -17,6 +20,21 @@ const Customers = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const fetchMerchants = async () => {
+    try {
+      const response = await getMerchants();
+      if (response.status === 200) {
+        setMerchants(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchMerchants();
+  }, []);
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <div className="h-[120px] px-[20px] flex items-center justify-between bg-white w-full border my-[20px]">
@@ -126,24 +144,24 @@ const Customers = () => {
           <p className="w-[20%]">Full name</p>
           <p className="w-[15%]">Role</p>
           <p className="w-[20%]">Email</p>
-          <p className="w-[15%]">Phone number</p>
+          <p className="w-[15%]">Business Name</p>
           <p className="w-[15%]">Date</p>
           <p className="w-[10%]">Actions</p>
         </div>
-        {customers.map((customer) => (
+        {merchants.map((customer) => (
           <div
-            key={customer.id}
+            key={customer.merchantId}
             className="flex text-[14px] border-b h-[55px] items-center"
           >
             <div className="w-[5%]">
               <input type="checkbox" name="export" id="export" />
             </div>
-            <p className="w-[5%] truncate">{customer.id}</p>
-            <p className="w-[20%] truncate">{customer.fullName}</p>
-            <p className="w-[15%] truncate">{customer.role}</p>
+            <p className="w-[5%] truncate">{customer.merchantId}</p>
+            <p className="w-[20%] truncate">{customer.firstName} {customer.lastName}</p>
+            <p className="w-[15%] truncate">{customer.merchantType}</p>
             <p className="w-[20%] truncate">{customer.email}</p>
-            <p className="w-[15%] truncate">{customer.phoneNumber}</p>
-            <p className="w-[15%] truncate">{customer.date}</p>
+            <p className="w-[15%] truncate">{customer.businessName}</p>
+            <p className="w-[15%] truncate">{customer.createdAt}</p>
             <div className="w-[10%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +184,7 @@ const Customers = () => {
                 height="24"
                 viewBox="0 0 24 24"
                 className="cursor-pointer"
-                onClick={() => navigate(`/dashboard/customers/${customer.id}`)}
+                onClick={() => navigate(`/dashboard/customers/${customer.merchantId}`)}
               >
                 <g fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="3" />

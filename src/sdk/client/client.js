@@ -5,15 +5,20 @@ function httpClient(baseURL) {
     baseURL,
     timeout: 10000,
   });
+
   baseClient.interceptors.request.use(async (request) => {
-    const user = await JSON.parse(localStorage.getItem("authUser"));
-    console.log(user);
-    const accessToken = user.token;
+    const user = JSON.parse(localStorage.getItem("authUser"));
+    const accessToken = user ? user.token : null;
+
+    if (!accessToken) {
+      throw new Error("No access token available");
+    }
+
     return {
       ...request,
       headers: {
         ...request.headers,
-        ...(accessToken ? { Authorization: `bearer ${accessToken}` } : {}),
+        Authorization: `Bearer ${accessToken}`,
       },
     };
   });
@@ -21,4 +26,4 @@ function httpClient(baseURL) {
   return baseClient;
 }
 
-export const client = httpClient("https://ah.egroup.co.ke/shop/portal/api");
+export const client = httpClient("https://ah.egroup.co.ke/shop/portal/api/");

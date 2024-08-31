@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { users } from "../../static/users";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getUsers } from "../../sdk/users/users";
 
 const Users = () => {
   const navigate = useNavigate();
+
+  const [allUsers, setAllUsers] = useState([]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await getUsers();
+      if (response.status === 200) {
+        setAllUsers(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <p className="text-[16px] font-bold">All users</p>
@@ -116,20 +135,29 @@ const Users = () => {
           <p className="w-[15%]">County</p>
           <p className="w-[10%]">Actions</p>
         </div>
-        {users.map((user) => (
+        {allUsers.map((user) => (
           <div
-            key={user.id}
+            key={user.userId}
             className="flex text-[14px] border-b h-[55px] items-center"
           >
             <div className="w-[5%]">
               <input type="checkbox" name="export" id="export" />
             </div>
-            <p className="w-[5%] truncate">{user.id}</p>
-            <p className="w-[20%] truncate">{user.name}</p>
-            <p className="w-[15%] truncate">{user.gender}</p>
+            <p className="w-[5%] truncate">{user.userId}</p>
+            <p className="w-[20%] truncate">
+              {user.firstName} {user.lastName}
+            </p>
+            <p className="w-[15%] truncate">{user.username}</p>
             <p className="w-[20%] truncate">{user.email}</p>
-            <p className="w-[15%] truncate">{user.phoneNumber}</p>
-            <p className="w-[15%] truncate">{user.address.county}</p>
+            <p className="w-[15%] truncate">{user.msisdn}</p>
+            <div className="w-[15%]">
+              {user.roles.length > 0 &&
+                user.roles.map((role) => (
+                  <div className="flex flex-col gap-[5px]">
+                    <p className="truncate">{role.title}</p>
+                  </div>
+                ))}
+            </div>
             <div className="w-[10%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,25 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { products } from "../../static/products";
+import { toast } from "react-toastify";
+import { getProduct, getProducts } from "../../sdk/products/products";
 
 const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  let productDetails = products.find((product) => product.id === id);
+  const [productDetails, setProductDetails] = useState({});
+  const [allProducts, setAllProducts] = useState([]);
 
-  let otherProducts = products.filter(
+  const fetchProduct = async () => {
+    try {
+      const response = await getProduct(id);
+      if (response.status === 200) {
+        setProductDetails(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getProducts();
+      if (response.status == 200) {
+        setAllProducts(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+
+  let otherProducts = allProducts?.filter(
     (product) =>
-      product.category === productDetails.category && product.id !== id
+      product.categoryId === productDetails.categoryId &&
+      product.product_id !== id
   );
+
+  useEffect(() => {
+    fetchProduct();
+    fetchProducts();
+  }, []);
 
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
-      <p className="text-[20px] my-[20px] font-bold">{productDetails.name}</p>
+      <p className="text-[20px] my-[20px] font-bold">{productDetails.title}</p>
       <div className="w-full max-h-[600px] h-[600px] min-h-[400px] flex justify-between">
         <div className="w-[40%] flex items-center justify-center h-full">
           <img
             className="w-[100%] h-[100%] object-fit"
-            src="/jembe.webp"
+            src={
+              productDetails?.images?.length > 0
+                ? productDetails?.images[0]?.image_url
+                : "/jembe.webp"
+            }
             alt="jember"
           />
         </div>
@@ -27,22 +62,22 @@ const Product = () => {
           <div className="flex items-center gap-[10px]">
             <p>Status:</p>
             <div className="bg-[#0000FF] text-white text-[12px] px-[5px] rounded-md">
-              <p>{productDetails.status}</p>
+              <p>Active</p>
             </div>
           </div>
-          <p className="text-[20px] font-bold">{productDetails.name}</p>
+          <p className="text-[20px] font-bold">{productDetails.title}</p>
           <p className="text-[24px] fontnormal my-[20px]">
             KSHS.{" "}
             {Intl.NumberFormat("en-US", {
               minimumFractionDigits: 2,
-            }).format(Number(productDetails.salePrice))}
+            }).format(Number(productDetails.price))}
           </p>
           <div className="bg-[#D1FAE6] w-[100px] flex items-center justify-center text-[#229D72] text-[12px] px-[5px] rounded-md">
             In stock
           </div>
           <div className="flex items-center mb-[20px] gap-[10px]">
             <p className="text-[18px]">QUANTITY:</p>
-            <p className="text-[18px]">{productDetails.stock}</p>
+            <p className="text-[18px]">{productDetails.quantity}</p>
           </div>
           <div className="my-[20px]">
             <p className="text-[16px] font-semibold">Description</p>
@@ -59,10 +94,12 @@ const Product = () => {
             {otherProducts.length > 0 ? (
               otherProducts.map((product) => (
                 <div
-                  onClick={() => navigate(`/dashboard/products/${product.id}`)}
+                  onClick={() =>
+                    navigate(`/dashboard/products/${product.productId}`)
+                  }
                   className="bg-gray-300 cursor-pointer w-[200px] mb-[10px] flex items-center justify-center rounded-lg"
                 >
-                  <p className="text-[13px]">{product.name}</p>
+                  <p className="text-[13px]">{product.title}</p>
                 </div>
               ))
             ) : (
@@ -70,7 +107,12 @@ const Product = () => {
             )}
           </div>
           <div className="w-full">
-            <button className="bg-[#12B981] h-[50px] w-full my-[20px] text-white">
+            <button
+              onClick={() =>
+                navigate(`/dashboard/products/${productDetails.product_id}/edit`)
+              }
+              className="bg-[#12B981] h-[50px] w-full my-[20px] text-white"
+            >
               Edit product
             </button>
           </div>

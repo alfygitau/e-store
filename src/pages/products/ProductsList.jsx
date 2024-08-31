@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { products } from "../../static/products";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getProducts } from "../../sdk/products/products";
 
 const ProductsList = () => {
   const navigate = useNavigate();
+  const [allProducts, setAllProducts] = useState([]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getProducts();
+      if (response.status == 200) {
+        setAllProducts(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <p>Products</p>
@@ -116,38 +134,40 @@ const ProductsList = () => {
           <div className="w-[4%]">
             <input type="checkbox" name="export" id="export" />
           </div>
-          <p className="w-[12%]">Name</p>
-          <p className="w-[12%]">Category</p>
-          <p className="w-[12%]">Price</p>
-          <p className="w-[12%]">Sale price</p>
-          <p className="w-[12%]">Stock</p>
-          <p className="w-[12%]">Status</p>
-          <p className="w-[12%]">Published</p>
+          <p className="w-[16%]">Name</p>
+          <p className="w-[16%]">Merchant store</p>
+          <p className="w-[12%]">Price(KES)</p>
+          <p className="w-[10%]">Sale price(KES)</p>
+          <p className="w-[10%]">Stock</p>
+          <p className="w-[10%]">Quantity</p>
+          <p className="w-[10%]">Discount(%)</p>
           <p className="w-[12%]">Actions</p>
         </div>
-        {products.map((product) => (
+        {allProducts.map((product) => (
           <div
-            key={product?.id}
+            key={product?.productId}
             className="flex text-[14px] border-b h-[50px] items-center"
           >
             <div className="w-[4%]">
               <input type="checkbox" name="export" id="export" />
             </div>
-            <p className="w-[12%] truncate">{product.name}</p>
-            <p className="w-[12%] truncate">{product.category}</p>
+            <p className="w-[16%] truncate">{product.title}</p>
+            <p className="w-[16%] truncate">{product.merchant.business_name}</p>
             <p className="w-[12%] truncate">{product.price}</p>
-            <p className="w-[12%] truncate">{product.salePrice}</p>
-            <p className="w-[12%] truncate">{product.stock}</p>
-            <p className="w-[12%] truncate">{product.status}</p>
-            <p className="w-[12%] truncate">
-              {product.published ? "Yes" : "No"}
-            </p>
+            <p className="w-[10%] truncate">{product.price}</p>
+            <p className="w-[10%] truncate">{product.stock_balance}</p>
+            <p className="w-[10%] truncate">{product.quantity}</p>
+            <p className="w-[10%] truncate">{product.discount}</p>
             <div className="w-[12%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
+                className="cursor-pointer"
+                onClick={() =>
+                  navigate(`/dashboard/products/${product?.productId}/edit`)
+                }
               >
                 <path
                   fill="none"
@@ -164,7 +184,9 @@ const ProductsList = () => {
                 height="24"
                 viewBox="0 0 24 24"
                 className="cursor-pointer"
-                onClick={() => navigate(`/dashboard/products/${product.id}`)}
+                onClick={() =>
+                  navigate(`/dashboard/products/${product.productId}`)
+                }
               >
                 <g fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="3" />

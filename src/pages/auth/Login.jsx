@@ -74,8 +74,8 @@ const Login = () => {
           phoneNumber: response.data.message.userInfo.msisdn,
           idToken: "",
           provider: "",
-          user: "",
-          roles:response.data.message.userInfo.roles
+          user: response.data.message.userInfo,
+          roles: response.data.message.userInfo.roles,
         });
         toast.success("Success login");
         navigate("/dashboard");

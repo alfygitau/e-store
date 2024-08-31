@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { categories } from "../../static/categories";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "../../sdk/product-category/category";
+import { toast } from "react-toastify";
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Categories = () => {
         setProductCategories(response.data.message);
       }
     } catch (error) {
-      toast.error(error?.response.data.message);
+      toast.error(error?.response?.data?.message || error?.message);
     }
   };
 
@@ -120,10 +121,10 @@ const Categories = () => {
           <p className="w-[15%]">Category name</p>
           <p className="w-[30%]">Description</p>
           <p className="w-[10%]">Status</p>
-          <p className="w-[15%]">Published</p>
+          <p className="w-[15%]">Created At</p>
           <p className="w-[15%]">Actions</p>
         </div>
-        {categories.map((category) => (
+        {productCategories.map((category) => (
           <div
             key={category.id}
             className="flex text-[14px] border-b h-[50px] items-center"
@@ -131,11 +132,11 @@ const Categories = () => {
             <div className="w-[5%]">
               <input type="checkbox" name="export" id="export" />
             </div>
-            <p className="w-[10%]">{category.id}</p>
+            <p className="w-[10%]">{category.categoryId}</p>
             <p className="w-[15%]">{category.name}</p>
             <p className="w-[30%] truncate">{category.description}</p>
-            <p className="w-[10%]">{category.status}</p>
-            <p className="w-[15%]">{category.published ? "Yes" : "No"}</p>
+            <p className="w-[10%]">{category.status || "Active"}</p>
+            <p className="w-[15%]">{category.created_at}</p>
             <div className="w-[15%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -24,6 +24,8 @@ import Customer from "./pages/customers/Customer";
 import Users from "./pages/users/Users";
 import User from "./pages/users/User";
 import AddUser from "./pages/users/AddUser";
+import EditProduct from "./pages/products/EditProduct";
+import AddProductImages from "./pages/products/AddProductImages";
 
 function App() {
   return (
@@ -35,6 +37,11 @@ function App() {
           <Route index element={<Homepage />} />
           <Route path="products" element={<ProductsList />} />
           <Route path="add-product" element={<AddProduct />} />
+          <Route path="products/:id/edit" element={<EditProduct />} />
+          <Route
+            path="products/:id/add-images"
+            element={<AddProductImages />}
+          />
           <Route path="categories" element={<Categories />} />
           <Route path="add-category" element={<AddCategory />} />
           <Route path="customers" element={<Customers />} />

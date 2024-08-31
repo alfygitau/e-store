@@ -1,8 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Select, Space } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../storage/firebase";
+import { addMerchant } from "../../sdk/merchants/merchant";
+import { toast } from "react-toastify";
+import { getRoles } from "../../sdk/roles/roles";
+import { getCounties } from "../../sdk/county/county";
+import { getAccounts } from "../../sdk/accounts/accounts";
 
 const InputDistributor = () => {
   const [firstName, setFirstName] = useState("");
@@ -10,15 +15,47 @@ const InputDistributor = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [county, setCounty] = useState("");
+  const [subcounty, setSubCounty] = useState("");
+  const [ward, setWard] = useState("");
   const [idNumber, setIdNumber] = useState("");
-  const [gender, setGender] = useState("");
   const [supplier, setSupplier] = useState("");
-  const [url, setUrl] = useState("");
-  const [role, setRole] = useState(null);
+  const [roles, setRoles] = useState([]);
+  const [rolesId, setRolesId] = useState([]);
+  const [counties, setCounties] = useState([]);
+  const [subcounties, setSubCounties] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [businessName, setBusinessName] = useState("");
+  const [idUrl, setIdUrl] = useState("");
+  const navigate = useNavigate();
+  const [accounts, setAccounts] = useState([]);
+  const [accountType, setAccountType] = useState("");
 
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
+  const handleChange = (selectedValues) => {
+    if (Array.isArray(selectedValues)) {
+      setRolesId(selectedValues);
+    } else if (typeof selectedValues === "string") {
+      setRolesId(selectedValues.split(","));
+    } else {
+      setRolesId([selectedValues]);
+    }
   };
+
+  const handleCountyChange = (value) => {
+    setCounty(value);
+    let filteredCounty = counties.find(
+      (county) => county.county_id === Number(value)
+    );
+    setSubCounties(filteredCounty.subcounties);
+  };
+
+  const handleSubCountyChange = (value) => {
+    setSubCounty(value);
+    let filteredSubCounty = subcounties.find(
+      (subcounty) => subcounty.sub_county_id === Number(value)
+    );
+    setWards(filteredSubCounty.wards);
+  };
+
   const fileInputRef = useRef(null);
   const registrationFileInputRef = useRef(null);
   const kephisCertificateFileInputRef = useRef(null);
@@ -117,61 +154,88 @@ const InputDistributor = () => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log(downloadURL);
+            setIdUrl(downloadURL);
           });
         }
       );
     }
   };
-  const options = [
-    {
-      label: "Cash",
-      value: "cash",
-      desc: "Cash",
-    },
-    {
-      label: "Credit",
-      value: "credit",
-      desc: "Credit",
-    },
-    {
-      label: "Card",
-      value: "card",
-      desc: "Card",
-    },
-  ];
+
+  const getAllRoles = async () => {
+    try {
+      const response = await getRoles();
+      if (response.status === 200) {
+        const mappedRoles = response.data.message.map((role) => ({
+          label: role.title,
+          value: role.roleId,
+          desc: role.title,
+        }));
+        setRoles(mappedRoles);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  const getAllCounties = async () => {
+    try {
+      const response = await getCounties();
+      if (response.status === 200 || response.status === 400) {
+        setCounties(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  const fetchAccounts = async () => {
+    try {
+      const response = await getAccounts();
+      if (response.status === 200) {
+        setAccounts(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    getAllRoles();
+    getAllCounties();
+    fetchAccounts();
+  }, []);
 
   const createMerchant = async () => {
     let payload = {
-      wardId: 2,
-      subscriptionStatus: "EXPIRED",
-      subscriptionEndDate: "2023-06-15",
-      businessName: "Another Business Example",
+      accountId: accountType,
+      wardId: ward,
+      subscriptionStatus: "ACTIVE",
+      subscriptionEndDate: "2030-06-15",
+      businessName: businessName,
       merchantType: "INPUT_DISTRIBUTOR",
       firstName: firstName,
       lastName: lastName,
       email: email,
       msisdn: phone,
       username: phone,
-      roles: [9],
+      roles: rolesId,
       documents: [
         {
-          title: "Document A",
-          imageUrl: "http://example.com/imageA.png",
-          documentNumber: "DOC125",
-        },
-        {
-          title: "Document B",
-          imageUrl: "http://example.com/imageB.png",
-          documentNumber: "DOC126",
-        },
-        {
-          title: "Document C",
-          imageUrl: "http://example.com/imageC.png",
-          documentNumber: "DOC127",
+          title: "Id Number",
+          imageUrl: idUrl,
+          documentNumber: idNumber,
         },
       ],
     };
+    try {
+      const response = await addMerchant(payload);
+      if (response.status === 201 || response.status === 200) {
+        toast.success("Merchant added successfully");
+        navigate("/dashboard/customers");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message);
+    }
   };
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
@@ -225,37 +289,64 @@ const InputDistributor = () => {
             <select
               type="text"
               value={county}
-              onChange={(e) => setCounty(e.target.value)}
+              onChange={(e) => handleCountyChange(e.target.value)}
               placeholder="Enter your phone number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             >
               <option value="">Select your county</option>
-              <option value="busia">Busia</option>
-              <option value="siaya">Siaya</option>
+              {counties.length > 0 &&
+                counties.map((county) => (
+                  <option key={county.county_id} value={county.county_id}>
+                    {county.county_title}
+                  </option>
+                ))}
             </select>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
-            <label htmlFor="gender">Gender</label>
+            <label htmlFor="phone">Sub County</label>
             <select
               type="text"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              placeholder="Enter your gender"
+              value={subcounty}
+              onChange={(e) => handleSubCountyChange(e.target.value)}
+              placeholder="Enter your phone number"
               class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             >
-              <option value="">Select your gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="">Select your subcounty</option>
+              {subcounties?.map((subcounty) => (
+                <option
+                  key={subcounty?.sub_county_id}
+                  value={subcounty?.sub_county_id}
+                >
+                  {subcounty?.sub_county_title}
+                </option>
+              ))}
             </select>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
-            <label htmlFor="vehicle-number">Modes of payment</label>
+            <label htmlFor="phone">Ward</label>
+            <select
+              type="text"
+              value={ward}
+              onChange={(e) => setWard(e.target.value)}
+              placeholder="Enter your phone number"
+              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+            >
+              <option value="">Select your ward</option>
+              {wards?.map((ward) => (
+                <option key={ward.ward_id} value={ward.ward_id}>
+                  {ward.ward_title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col w-full mb-[20px]">
+            <label htmlFor="vehicle-number">Roles</label>
             <Select
               mode="multiple"
               style={{ width: "100%", height: "50px", borderRadius: "0px" }}
-              placeholder="select the modes of payments"
+              placeholder="select your roles"
               onChange={handleChange}
-              options={options}
+              options={roles}
               optionRender={(option) => <Space>{option.data.desc}</Space>}
             />
           </div>
@@ -299,7 +390,7 @@ const InputDistributor = () => {
             </div>
           </div>
           <div className="flex flex-col w-full mb-[20px]">
-            <label htmlFor="license">Main supplier</label>
+            <label htmlFor="license">Main supplier(if any)</label>
             <input
               type="text"
               value={supplier}
@@ -310,6 +401,33 @@ const InputDistributor = () => {
           </div>
         </div>
         <div className="flex w-[45%] sm:w-[100%] flex flex-col">
+          <div className="flex flex-col w-full mb-[20px]">
+            <label htmlFor="phone">Account type</label>
+            <select
+              type="text"
+              value={accountType}
+              onChange={(e) => setAccountType(e.target.value)}
+              placeholder="Enter your phone number"
+              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+            >
+              <option value="">Select your account</option>
+              {accounts?.map((account) => (
+                <option key={account.accountId} value={account.accountId}>
+                  {account.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col w-full mb-[20px]">
+            <label htmlFor="license">Business name</label>
+            <input
+              type="text"
+              value={businessName}
+              onChange={(e) => setBusinessName(e.target.value)}
+              placeholder="Enter your business name"
+              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
+            />
+          </div>
           <div className="flex flex-col w-full mb-[20px]">
             <label htmlFor="name">
               Upload your certificate of registration
@@ -438,7 +556,10 @@ const InputDistributor = () => {
         </span>
       </div>
       <div className="flex w-full items-center justify-end">
-        <button className="h-[45px] sm:w-[95%] mx-auto text-white bg-[#12B981] px-[30px]">
+        <button
+          onClick={createMerchant}
+          className="h-[45px] sm:w-[95%] sm:mx-auto text-white bg-[#12B981] px-[30px]"
+        >
           Create Profile
         </button>
       </div>

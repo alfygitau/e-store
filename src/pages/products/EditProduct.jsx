@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { createProduct } from "../../sdk/products/products";
-import { storage } from "../../storage/firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  editProduct,
+  getProduct,
+  getProducts,
+} from "../../sdk/products/products";
 import { getCategories } from "../../sdk/product-category/category";
-import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate, useParams } from "react-router-dom";
 
-const AddProduct = () => {
-  const fileInputRef = useRef(null);
+const EditProduct = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [productDetails, setProductDetails] = useState({});
+  const [allProducts, setAllProducts] = useState([]);
+
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productQuantity, setProductQuantity] = useState("");
@@ -16,34 +22,6 @@ const AddProduct = () => {
   const [productStock, setProductStock] = useState("");
   const [productCategory, setProductCategory] = useState("");
   const [productCategories, setProductCategories] = useState([]);
-  const [productImages, setProductImages] = useState([]);
-  const { user } = useAuth();
-
-  const handleClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const storageRef = ref(storage, `images/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error("Upload failed:", error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setProductImages((prev) => [...prev, downloadURL]);
-          });
-        }
-      );
-    }
-  };
 
   const getProductCategories = async () => {
     try {
@@ -56,26 +34,59 @@ const AddProduct = () => {
     }
   };
 
+  const fetchProduct = async () => {
+    try {
+      const response = await getProduct(id);
+      if (response.status === 200) {
+        setProductDetails(response.data.message);
+        setProductName(response.data.message.title);
+        setProductDescription(response.data.message.description);
+        setProductPrice(response.data.message.price);
+        setProductQuantity(response.data.message.quantity);
+        setProductStock(response.data.message.stock_balance);
+        setProductMeasureUnit(response.data.message.unit_of_measurement);
+        setProductCategory(response.data.message.categoryId);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getProducts();
+      if (response.status == 200) {
+        setAllProducts(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+
+  let otherProducts = allProducts?.filter(
+    (product) =>
+      product.categoryId === productDetails.categoryId &&
+      product.product_id !== id
+  );
+
   useEffect(() => {
     getProductCategories();
+    fetchProduct();
+    fetchProducts();
   }, []);
 
-  const createAProduct = async () => {
+  const EditAProduct = async () => {
     try {
-      const response = await createProduct({
+      const response = await editProduct(id, {
         title: productName,
         description: productDescription,
-        categoryId: Number(productCategory),
-        merchantId: Number(user?.uid),
-        quantity: Number(productQuantity),
+        quantity: productQuantity,
         unitOfMeasurement: productMeasureUnit,
-        stockBalance: Number(productStock),
-        price: Number(productPrice),
-        discount: 0,
-        images: productImages,
+        stockBalance: productStock,
+        price: productPrice,
       });
       if (response.status === 200 || response.status === 201) {
-        toast.success("Product created successfully");
+        toast.success("Product updated successfully");
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || error?.message);
@@ -83,9 +94,9 @@ const AddProduct = () => {
   };
   return (
     <div className="p-[20px] h-full w-full overflow-y-auto">
-      <p className="font-bold text-[16px] my-[20px]">
-        Add a product to the catalog
-      </p>
+      <div className="flex items-center w-full my-[20px] justify-between">
+        <p className="font-bold text-[16px]">Edit the product</p>
+      </div>
       <div className="flex w-full gap-[40px]">
         <div className="flex w-[45%] flex flex-col">
           <div className="flex flex-col w-full mb-[20px]">
@@ -108,49 +119,38 @@ const AddProduct = () => {
               className="h-[100px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
           </div>
-          <div className="flex flex-col w-full mb-[20px]">
+          <div className="flex w-full items-center justify-between">
             <label htmlFor="name">Product images</label>
-            <div
-              onClick={handleClick}
-              className="w-full cursor-pointer h-[160px] border-2 border-dashed flex flex-col justify-center items-center gap-[10px]"
+            <button
+              onClick={() =>
+                navigate(
+                  `/dashboard/products/${productDetails.product_id}/add-images`
+                )
+              }
+              className="bg-[#12B981] flex items-center justify-center gap-[10px] h-[40px] px-[10px] text-white rounded"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="60"
-                height="60"
-                viewBox="0 0 48 48"
+                width="18"
+                height="18"
+                viewBox="-4.5 -4.5 24 24"
               >
                 <path
-                  fill="none"
-                  stroke="#12B981"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="4"
-                  d="M11.678 20.271C7.275 21.318 4 25.277 4 30c0 5.523 4.477 10 10 10c.947 0 1.864-.132 2.733-.378m19.322-19.351c4.403 1.047 7.677 5.006 7.677 9.729c0 5.523-4.477 10-10 10c-.947 0-1.864-.132-2.732-.378M36 20c0-6.627-5.373-12-12-12s-12 5.373-12 12m5.065 7.881L24 20.924L31.132 28M24 38V24.462"
+                  fill="currentColor"
+                  d="M8.9 6.9v-5a1 1 0 1 0-2 0v5h-5a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2z"
                 />
               </svg>
-              <p>Click here to upload more product images</p>
-              <p className="text-[14px] italic text-[#9CA3AF]">
-                png, jpeg, webp, and jpg images will be accepted
-              </p>
-              <input
-                type="file"
-                ref={fileInputRef}
-                multiple
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-                accept=".png,.jpeg,.webp,.jpg"
-              />
-            </div>
+              Add product images
+            </button>
           </div>
           <div className="w-full flex items-center flex-wrap gap-[20px] my-[20px]">
-            {productImages.length > 0 &&
-              productImages.map((image) => (
+            {productDetails?.images?.length > 0 &&
+              productDetails?.images.map((image) => (
                 <div key={image} className="w-[45%] h-[200px]">
                   <img
-                    src={image}
+                    src={image.image_url}
                     className="h-full w-full object-cover"
-                    alt={image}
+                    alt={image.image_url}
                   />
                 </div>
               ))}
@@ -216,43 +216,41 @@ const AddProduct = () => {
             />
           </div>
           <div className="flex flex-col w-full mb-[20px]">
-            <label htmlFor="name">Number of items in stock</label>
+            <label htmlFor="name">Product slug</label>
             <input
               type="text"
-              value={productStock}
-              onChange={(e) => setProductStock(e.target.value)}
               placeholder="Enter the product slug"
               className="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
             />
           </div>
-          <div className="flex flex-col w-full mb-[20px]">
-            <label htmlFor="phone">Unit of measurement</label>
-            <select
-              type="text"
-              value={productMeasureUnit}
-              onChange={(e) => setProductMeasureUnit(e.target.value)}
-              placeholder="Enter your phone number"
-              class="h-[50px] w-full text-[14px] border px-[10px] border-gray-300 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:border-primary-110"
-            >
-              <option value="">Select the unit of measurement</option>
-              <option value="KG">KG</option>
-              <option value="Litres">Litres</option>
-              <option value="M">Metres</option>
-              <option value="CM">Centimetres</option>
-            </select>
+          <div className="flex gap-[20px] flex-col w-full mb-[20px]">
+            <label htmlFor="name">Related products</label>
+            <div>
+              {otherProducts?.length > 0 &&
+                otherProducts.map((product) => (
+                  <div
+                    onClick={() =>
+                      navigate(`/dashboard/products/${product.productId}`)
+                    }
+                    className="bg-gray-300 cursor-pointer w-full h-[40px] mb-[10px] flex items-center justify-center rounded-lg"
+                  >
+                    <p className="text-[13px]">{product.title}</p>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>
       <div className="flex justify-end">
         <button
-          onClick={createAProduct}
+          onClick={EditAProduct}
           className="h-[45px] text-white bg-[#12B981] px-[30px]"
         >
-          Add product
+          Edit product
         </button>
       </div>
     </div>
   );
 };
 
-export default AddProduct;
+export default EditProduct;

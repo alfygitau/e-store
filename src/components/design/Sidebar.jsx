@@ -9,7 +9,10 @@ const Sidebar = () => {
   return (
     <div className="flex flex-col h-full py-[20px]">
       <div className="h-full flex flex-col justify-between">
-        <div className="w-full h-[10%] flex items-center">
+        <div
+          onClick={() => navigate("/dashboard")}
+          className="w-full h-[10%] flex cursor-pointer items-center"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="100"

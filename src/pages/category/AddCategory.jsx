@@ -1,12 +1,14 @@
 import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { createCategory } from "../../sdk/product-category/category";
+import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
+  const navigate = useNavigate();
 
   const handleClick = () => {
     if (fileInputRef.current) {
@@ -28,13 +30,13 @@ const AddCategory = () => {
     };
     try {
       const response = await createCategory(payload);
-      if (response.status === 201 || response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         toast.success("Category created");
         setCategoryName("");
         setCategoryDescription("");
+        navigate("/dashboard/categories");
       }
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message || error?.message);
     }
   };
