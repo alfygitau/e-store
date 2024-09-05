@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -11,8 +11,30 @@ import {
 } from "recharts";
 import { PieChart, Pie, Sector, Cell } from "recharts";
 import { orders } from "../../static/orders";
+import { toast } from "react-toastify";
+import { getOrders, getOrdersStatistics } from "../../sdk/orders/orders";
 
 const Homepage = () => {
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalPendingOrders, setTotalPendingOrders] = useState(0);
+  const [totalProcessingOrders, setTotalProcessingOrders] = useState(0);
+  const [totalDeliveredOrders, setTotalDeliveredOrders] = useState(0);
+
+  const [allOrders, setAllOrders] = useState([]);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await getOrders();
+      setAllOrders(response.data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
   const data = [
     {
       name: "Jan",
@@ -127,6 +149,22 @@ const Homepage = () => {
       ))}
     </div>
   );
+
+  const fetchOrderStats = async () => {
+    try {
+      const response = await getOrdersStatistics();
+      setTotalOrders(response.data.message.totalOrders);
+      setTotalPendingOrders(response.data.message.totalPending);
+      setTotalProcessingOrders(response.data.message.totalProcessing);
+      setTotalDeliveredOrders(response.data.message.totalDelivered);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrderStats();
+  }, []);
   return (
     <div className="h-full overflow-y-auto p-[20px] w-full">
       <p className="text-[18px] font-bold mb-[10px]">Dashboard Overview</p>
@@ -348,7 +386,7 @@ const Homepage = () => {
           </div>
           <div>
             <p className="text-[15px]">Total Orders</p>
-            <p className="text-[26px] font-bold">294</p>
+            <p className="text-[26px] font-bold">{totalOrders}</p>
           </div>
         </div>
         <div className="h-[90px] bg-white px-[20px] w-[24%] border rounded flex items-center gap-[15px]">
@@ -367,7 +405,7 @@ const Homepage = () => {
           </div>
           <div>
             <p className="text-[15px]">Orders Pending</p>
-            <p className="text-[26px] font-bold">53</p>
+            <p className="text-[26px] font-bold">{totalPendingOrders}</p>
           </div>
         </div>
         <div className="h-[90px] bg-white px-[20px] w-[24%] border rounded flex items-center gap-[15px]">
@@ -389,7 +427,7 @@ const Homepage = () => {
           </div>
           <div>
             <p className="text-[15px]">Orders Processing</p>
-            <p className="text-[26px] font-bold">100</p>
+            <p className="text-[26px] font-bold">{totalProcessingOrders}</p>
           </div>
         </div>
         <div className="h-[90px] bg-white px-[20px] w-[24%] border rounded flex items-center gap-[15px]">
@@ -417,7 +455,7 @@ const Homepage = () => {
           </div>
           <div>
             <p className="text-[15px]">Orders Delivered</p>
-            <p className="text-[26px] font-bold">70</p>
+            <p className="text-[26px] font-bold">{totalDeliveredOrders}</p>
           </div>
         </div>
       </div>
@@ -480,25 +518,54 @@ const Homepage = () => {
         </div>
       </div>
       <div className="border bg-white p-[10px]">
-        <p>Recent orders</p>
-        <div className="flex font-semibold border-b-2 h-[50px] items-center">
-          <p className="w-[15%]">Order id</p>
-          <p className="w-[15%]">Order Date</p>
+        <div className="flex font-bold border-b-2 h-[55px] items-center">
+          <p className="w-[5%]">Id</p>
+          <p className="w-[20%]">Order Date</p>
           <p className="w-[17%]">Customer</p>
-          <p className="w-[12%]">Method</p>
+          <p className="w-[10%]">Merchant</p>
+          <p className="w-[10%]">Method</p>
           <p className="w-[15%]">Amount</p>
-          <p className="w-[13%]">Status</p>
+          <p className="w-[10%]">Status</p>
           <p className="w-[13%]">Action</p>
         </div>
-        {orders.map((order) => (
-          <div className="flex text-[14px] border-b h-[50px] items-center">
-            <p className="w-[15%]">{order?.id}</p>
-            <p className="w-[15%]">{order.date}</p>
-            <p className="w-[17%]">{order.customer}</p>
-            <p className="w-[12%]">{order.method}</p>
-            <p className="w-[15%]">{order.total}</p>
-            <p className="w-[13%]">{order.status}</p>
-            <p className="w-[13%]">Action</p>
+        {allOrders?.map((order) => (
+          <div className="flex text-[14px] border-b h-[55px] items-center">
+            <p className="w-[5%]">{order?.orderId}</p>
+            <p className="w-[20%]">{order.createdAt}</p>
+            <p className="w-[17%]">
+              {order.customer?.firstName} {order?.customer?.lastName}
+            </p>
+            <p className="w-[10%] truncate">{order?.merchant?.businessName}</p>
+            <p className="w-[10%] truncate">{order.paymentMethod}</p>
+            <p className="w-[15%]">{order.charge}</p>
+            <p className="w-[10%]">{order.orderStatus}</p>
+            <div className="w-[13%] flex items-center gap-[10px] truncate">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                className="cursor-pointer"
+                onClick={() => navigate(`/dashboard/orders/${order.orderId}`)}
+              >
+                <g fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M20.188 10.934c.388.472.582.707.582 1.066c0 .359-.194.594-.582 1.066C18.768 14.79 15.636 18 12 18c-3.636 0-6.768-3.21-8.188-4.934c-.388-.472-.582-.707-.582-1.066c0-.359.194-.594.582-1.066C5.232 9.21 8.364 6 12 6c3.636 0 6.768 3.21 8.188 4.934Z" />
+                </g>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  d="m18.412 6.5l-.801 13.617A2 2 0 0 1 15.614 22H8.386a2 2 0 0 1-1.997-1.883L5.59 6.5H3.5v-1A.5.5 0 0 1 4 5h16a.5.5 0 0 1 .5.5v1zM10 2.5h4a.5.5 0 0 1 .5.5v1h-5V3a.5.5 0 0 1 .5-.5M9 9l.5 9H11l-.4-9zm4.5 0l-.5 9h1.5l.5-9z"
+                />
+              </svg>
+            </div>
           </div>
         ))}
       </div>

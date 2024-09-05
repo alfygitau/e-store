@@ -16,6 +16,6 @@ export const authLogin = async (username, password) => {
     );
     return response;
   } catch (e) {
-    throw new Error(e);
+    return new Error(e);
   }
 };

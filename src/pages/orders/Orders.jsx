@@ -1,11 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { orders } from "../../static/orders";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getOrders } from "../../sdk/orders/orders";
 
 const Orders = () => {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState("2024-07-31");
   const [endDate, setEndDate] = useState("2024-07-31");
+
+  const [allOrders, setAllOrders] = useState([]);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await getOrders();
+      setAllOrders(response.data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
   return (
     <div className="p-[20px] w-full h-full overflow-y-auto">
       <p>Orders</p>
@@ -116,22 +133,24 @@ const Orders = () => {
       </div>
       <div className="border bg-white p-[10px]">
         <div className="flex font-bold border-b-2 h-[55px] items-center">
-          <p className="w-[15%]">Order id</p>
-          <p className="w-[15%]">Order Date</p>
+          <p className="w-[5%]">Id</p>
+          <p className="w-[20%]">Order Date</p>
           <p className="w-[17%]">Customer</p>
-          <p className="w-[12%]">Method</p>
+          <p className="w-[10%]">Merchant</p>
+          <p className="w-[10%]">Method</p>
           <p className="w-[15%]">Amount</p>
-          <p className="w-[13%]">Status</p>
+          <p className="w-[10%]">Status</p>
           <p className="w-[13%]">Action</p>
         </div>
-        {orders.map((order) => (
+        {allOrders?.map((order) => (
           <div className="flex text-[14px] border-b h-[55px] items-center">
-            <p className="w-[15%]">{order?.id}</p>
-            <p className="w-[15%]">{order.date}</p>
-            <p className="w-[17%]">{order.customer}</p>
-            <p className="w-[12%]">{order.method}</p>
-            <p className="w-[15%]">{order.total}</p>
-            <p className="w-[13%]">{order.status}</p>
+            <p className="w-[5%]">{order?.orderId}</p>
+            <p className="w-[20%]">{order.createdAt}</p>
+            <p className="w-[17%]">{order.customer?.firstName} {order?.customer?.lastName}</p>
+            <p className="w-[10%]">{order?.merchant?.businessName}</p>
+            <p className="w-[10%]">{order.paymentMethod}</p>
+            <p className="w-[15%]">{order.charge}</p>
+            <p className="w-[10%]">{order.orderStatus}</p>
             <div className="w-[13%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +158,7 @@ const Orders = () => {
                 height="24"
                 viewBox="0 0 24 24"
                 className="cursor-pointer"
-                onClick={() => navigate(`/dashboard/orders/${order.id}`)}
+                onClick={() => navigate(`/dashboard/orders/${order.orderId}`)}
               >
                 <g fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="3" />

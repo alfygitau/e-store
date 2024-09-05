@@ -80,10 +80,10 @@ const Login = () => {
         toast.success("Success login");
         navigate("/dashboard");
       } else {
-        toast.error(response.data.message);
+        toast.error(response.message);
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || error?.message);
     }
   };
   return (
