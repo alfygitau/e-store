@@ -51,9 +51,8 @@ const Product = () => {
           <img
             className="w-[100%] h-[100%] object-fit"
             src={
-              productDetails?.images?.length > 0
-                ? productDetails?.images[0]?.image_url
-                : "/jembe.webp"
+              productDetails?.images?.length > 0 &&
+              productDetails?.images[0]?.image_url
             }
             alt="jember"
           />
@@ -109,7 +108,9 @@ const Product = () => {
           <div className="w-full">
             <button
               onClick={() =>
-                navigate(`/dashboard/products/${productDetails.product_id}/edit`)
+                navigate(
+                  `/dashboard/products/${productDetails.product_id}/edit`
+                )
               }
               className="bg-[#12B981] h-[50px] w-full my-[20px] text-white"
             >

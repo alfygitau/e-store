@@ -13,13 +13,14 @@ import { PieChart, Pie, Sector, Cell } from "recharts";
 import { orders } from "../../static/orders";
 import { toast } from "react-toastify";
 import { getOrders, getOrdersStatistics } from "../../sdk/orders/orders";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalPendingOrders, setTotalPendingOrders] = useState(0);
   const [totalProcessingOrders, setTotalProcessingOrders] = useState(0);
   const [totalDeliveredOrders, setTotalDeliveredOrders] = useState(0);
-
+  const navigate = useNavigate();
   const [allOrders, setAllOrders] = useState([]);
 
   const fetchOrders = async () => {
@@ -167,7 +168,7 @@ const Homepage = () => {
   }, []);
   return (
     <div className="h-full overflow-y-auto p-[20px] w-full">
-      <p className="text-[18px] font-bold mb-[10px]">Dashboard Overview</p>
+      <p className="text-[18px] font-semibold mb-[10px]">Dashboard Overview</p>
       <div className="flex items-center mb-[40px] gap-[10px] overflow-x-auto scrollbar-hide">
         <div className="h-[200px] min-w-[320px] rounded bg-[#0B9488] text-white p-[10px] flex flex-col items-center justify-center">
           <svg
@@ -517,6 +518,7 @@ const Homepage = () => {
           </ResponsiveContainer>
         </div>
       </div>
+      <p className="mb-[10px] text-[14px]">Recent orders</p>
       <div className="border bg-white p-[10px]">
         <div className="flex font-bold border-b-2 h-[55px] items-center">
           <p className="w-[5%]">Id</p>

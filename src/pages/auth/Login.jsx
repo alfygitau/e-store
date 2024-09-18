@@ -67,7 +67,9 @@ const Login = () => {
       if (response.status === 200) {
         loginUser({
           uid: response.data.message.userInfo.accountId,
-          name: response.data.message.userInfo.username,
+          name: `${response.data.message.userInfo.first_name} ${response.data.message.userInfo.last_name}`,
+          firstName: response.data.message.userInfo.first_name,
+          lastName: response.data.message.userInfo.last_name,
           email: response.data.message.userInfo.email,
           photoURL: "",
           token: response.data.message.access_token,
