@@ -5,6 +5,7 @@ import { storage } from "../../storage/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getCategories } from "../../sdk/product-category/category";
 import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const fileInputRef = useRef(null);
@@ -18,6 +19,7 @@ const AddProduct = () => {
   const [productCategories, setProductCategories] = useState([]);
   const [productImages, setProductImages] = useState([]);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleClick = () => {
     if (fileInputRef.current) {
@@ -76,6 +78,7 @@ const AddProduct = () => {
       });
       if (response.status === 200 || response.status === 201) {
         toast.success("Product created successfully");
+        navigate("/dashboard/products");
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || error?.message);

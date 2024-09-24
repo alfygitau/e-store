@@ -2,7 +2,7 @@ import { client } from "../client/client";
 
 export const createProduct = async (payload) => {
   try {
-    const response = await client.post("/product/create", payload);
+    const response = await client.post("/product/create-batch", payload);
     return response;
   } catch (error) {
     throw new Error(error);

@@ -143,7 +143,7 @@ const ProductsList = () => {
           <p className="w-[10%]">Discount(%)</p>
           <p className="w-[12%]">Actions</p>
         </div>
-        {allProducts.map((product) => (
+        {allProducts?.map((product) => (
           <div
             key={product?.productId}
             className="flex text-[14px] border-b h-[50px] items-center"

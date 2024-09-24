@@ -66,7 +66,7 @@ const Login = () => {
       const response = await authLogin(email, password);
       if (response.status === 200) {
         loginUser({
-          uid: response.data.message.userInfo.accountId,
+          uid: response.data.message.userInfo.merchant.merchantId,
           name: `${response.data.message.userInfo.first_name} ${response.data.message.userInfo.last_name}`,
           firstName: response.data.message.userInfo.first_name,
           lastName: response.data.message.userInfo.last_name,
