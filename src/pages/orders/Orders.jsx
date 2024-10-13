@@ -20,6 +20,41 @@ const Orders = () => {
     }
   };
 
+  function formatDate(createdAt) {
+    const date = new Date(createdAt);
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const day = date.getDate();
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    const getOrdinalSuffix = (day) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
+    };
+    return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
+  }
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -132,25 +167,35 @@ const Orders = () => {
         </div>
       </div>
       <div className="border bg-white p-[10px]">
-        <div className="flex font-bold border-b-2 h-[55px] items-center">
+        <div className="flex text-[14px] font-bold border-b-2 h-[55px] items-center">
           <p className="w-[5%]">Id</p>
           <p className="w-[20%]">Order Date</p>
           <p className="w-[17%]">Customer</p>
-          <p className="w-[10%]">Merchant</p>
           <p className="w-[10%]">Method</p>
           <p className="w-[15%]">Amount</p>
           <p className="w-[10%]">Status</p>
+          <p className="w-[10%]">Delivery Status</p>
           <p className="w-[13%]">Action</p>
         </div>
         {allOrders?.map((order) => (
           <div className="flex text-[14px] border-b h-[55px] items-center">
             <p className="w-[5%]">{order?.orderId}</p>
-            <p className="w-[20%]">{order.createdAt}</p>
-            <p className="w-[17%]">{order.customer?.firstName} {order?.customer?.lastName}</p>
-            <p className="w-[10%]">{order?.merchant?.businessName}</p>
+            <p className="w-[20%]">{formatDate(order.createdAt)}</p>
+            <p className="w-[17%]">
+              {order.customer?.firstName} {order?.customer?.lastName}
+            </p>
             <p className="w-[10%]">{order.paymentMethod}</p>
-            <p className="w-[15%]">{order.charge}</p>
+            <p className="w-[15%]">
+              KES
+              {order.charge.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
             <p className="w-[10%]">{order.orderStatus}</p>
+            <p className="w-[10%]">
+              {order?.isDelivery == 0 ? "Not delivered" : "Delivered"}
+            </p>
             <div className="w-[13%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

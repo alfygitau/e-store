@@ -14,6 +14,7 @@ import { orders } from "../../static/orders";
 import { toast } from "react-toastify";
 import { getOrders, getOrdersStatistics } from "../../sdk/orders/orders";
 import { useNavigate } from "react-router-dom";
+import { getBestSellingProduct } from "../../sdk/products/products";
 
 const Homepage = () => {
   const [totalOrders, setTotalOrders] = useState(0);
@@ -22,6 +23,7 @@ const Homepage = () => {
   const [totalDeliveredOrders, setTotalDeliveredOrders] = useState(0);
   const navigate = useNavigate();
   const [allOrders, setAllOrders] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
 
   const fetchOrders = async () => {
     try {
@@ -129,7 +131,7 @@ const Homepage = () => {
         marginBottom: "20px",
       }}
     >
-      {data1.map((entry, index) => (
+      {bestSellers.map((entry, index) => (
         <div
           key={`label-bar-${index}`}
           style={{ marginRight: "20px", display: "flex", alignItems: "center" }}
@@ -144,7 +146,7 @@ const Homepage = () => {
             key={`color-box-${index}`}
           />
           <span className="text-[12px]" key={`label-text-${index}`}>
-            {entry.name}
+            {entry.title}
           </span>
         </div>
       ))}
@@ -163,8 +165,55 @@ const Homepage = () => {
     }
   };
 
+  const fetchBestSellingProducts = async () => {
+    try {
+      const response = await getBestSellingProduct();
+      if (response.status === 200) {
+        setBestSellers(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  function formatDate(createdAt) {
+    const date = new Date(createdAt);
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const day = date.getDate();
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    const getOrdinalSuffix = (day) => {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
+    };
+    return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
+  }
+
   useEffect(() => {
     fetchOrderStats();
+    fetchBestSellingProducts();
   }, []);
   return (
     <div className="h-full overflow-y-auto p-[20px] w-full">
@@ -498,14 +547,14 @@ const Homepage = () => {
           <ResponsiveContainer width="100%" height="80%">
             <PieChart width={400} height={400}>
               <Pie
-                data={data1}
+                data={bestSellers}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
                 label={renderCustomizedLabel}
                 outerRadius={200}
                 fill="#8884d8"
-                dataKey="value"
+                dataKey="total_quantity_sold"
               >
                 {data1.map((entry, index) => (
                   <Cell
@@ -520,27 +569,37 @@ const Homepage = () => {
       </div>
       <p className="mb-[10px] text-[14px]">Recent orders</p>
       <div className="border bg-white p-[10px]">
-        <div className="flex font-bold border-b-2 h-[55px] items-center">
+        <div className="flex text-[14px] font-bold border-b-2 h-[55px] items-center">
           <p className="w-[5%]">Id</p>
           <p className="w-[20%]">Order Date</p>
           <p className="w-[17%]">Customer</p>
-          <p className="w-[10%]">Merchant</p>
           <p className="w-[10%]">Method</p>
           <p className="w-[15%]">Amount</p>
           <p className="w-[10%]">Status</p>
+          <p className="w-[10%]">Delivery Status</p>
           <p className="w-[13%]">Action</p>
         </div>
         {allOrders?.map((order) => (
           <div className="flex text-[14px] border-b h-[55px] items-center">
             <p className="w-[5%]">{order?.orderId}</p>
-            <p className="w-[20%]">{order.createdAt}</p>
+            <p className="w-[20%]">{formatDate(order.createdAt)}</p>
             <p className="w-[17%]">
               {order.customer?.firstName} {order?.customer?.lastName}
             </p>
-            <p className="w-[10%] truncate">{order?.merchant?.businessName}</p>
+
             <p className="w-[10%] truncate">{order.paymentMethod}</p>
-            <p className="w-[15%]">{order.charge}</p>
+            <p className="w-[15%]">
+              {" "}
+              KES
+              {order.charge.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
             <p className="w-[10%]">{order.orderStatus}</p>
+            <p className="w-[10%] truncate">
+              {order?.isDelivery == 0 ? "Not delivered" : "Delivered"}
+            </p>
             <div className="w-[13%] flex items-center gap-[10px] truncate">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

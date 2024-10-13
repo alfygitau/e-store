@@ -35,3 +35,12 @@ export const getProduct = async (id) => {
     throw new Error(error);
   }
 };
+
+export const getBestSellingProduct = async () => {
+  try {
+    const response = await client.get(`/report/best-selling-products`);
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
