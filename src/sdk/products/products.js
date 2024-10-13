@@ -11,7 +11,7 @@ export const createProduct = async (payload) => {
 
 export const editProduct = async (id, payload) => {
   try {
-    const response = await client.post(`/product/update/${id}`, payload);
+    const response = await client.put(`/product/update/${id}`, payload);
     return response;
   } catch (error) {
     throw new Error(error);

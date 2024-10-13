@@ -72,33 +72,32 @@ const Order = () => {
           </div>
         </div>
       </div>
-      <p className="my-[20px] font-bold text-[15px]">Merchant shop details</p>
+      <p className="my-[20px] font-bold text-[15px]">Customer details</p>
       <div className="h-[200px] w-full bg-white p-[10px]">
         <div className="flex h-full flex-col justify-around">
           <div className="flex items-center gap-[20px]">
             <p className="text-[14px] text-gray-500">Merchant Id</p>
             <p className="text-[14px] font-semibold">
-              {orderDetails?.merchant?.merchantId}
+              {orderDetails?.customer?.customerId}
             </p>
           </div>
           <div className="flex items-center gap-[20px]">
-            <p className="text-[14px] text-gray-500">Merchant Business Name</p>
+            <p className="text-[14px] text-gray-500">Customer Name</p>
             <p className="text-[14px] font-semibold">
-              {orderDetails?.merchant?.businessName}
+              {orderDetails?.customer?.firstName}
+              {orderDetails?.customer?.lastName}
             </p>
           </div>
           <div className="flex items-center gap-[20px]">
-            <p className="text-[14px] text-gray-500">Merchant Business Type</p>
+            <p className="text-[14px] text-gray-500">Customer Email</p>
             <p className="text-[14px] font-semibold">
-              {orderDetails?.merchant?.merchantType}
+              {orderDetails?.customer?.email}
             </p>
           </div>
           <div className="flex items-center gap-[20px]">
-            <p className="text-[14px] text-gray-500">
-              Merchant Subscription Status
-            </p>
+            <p className="text-[14px] text-gray-500">Customer Mobile Number</p>
             <p className="text-[14px] font-semibold">
-              {orderDetails?.merchant?.subscriptionStatus}
+              {orderDetails?.customer?.msisdn}
             </p>
           </div>
         </div>
@@ -149,7 +148,7 @@ const Order = () => {
           </tbody>
         </table>
       </div>
-      <p className="my-[20px] font-bold text-[15px]">Order shipping address</p>
+      <p className="my-[20px] font-bold text-[15px]">Order address</p>
       <div></div>
     </div>
   );
